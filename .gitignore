@@ -1,0 +1,95 @@
+# Environment files and local secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+local_secrets/
+credentials/
+credentials.*
+
+# Python caches and tooling
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.envrc
+
+# Node / frontend dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+.next/
+.vite/
+coverage/
+site/
+
+# Logs and local runtime files
+*.log
+logs/
+tmp/
+temp/
+.cache/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Data and large generated outputs
+data/*
+!data/.gitkeep
+!data/README.md
+!data/synthetic/
+!data/synthetic/**
+data/rumor_detection_acl2017/
+data/FakeNewsNet dataset/
+outputs/*
+!outputs/.gitkeep
+
+# Model artifacts and checkpoints
+checkpoints/
+models/
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.joblib
+*.pkl
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Keep template documentation, agent files, configs, source, and tests tracked.
+!configs/
+!configs/example.yaml
+!configs/**
+!docs/
+!docs/**
+!.agent/
+!.agent/**
+!src/
+!src/**
+!tests/
+!tests/**

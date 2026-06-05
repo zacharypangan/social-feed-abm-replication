@@ -1,0 +1,139 @@
+# Research Project Guide
+
+Use this guide to keep research code understandable, reusable, and paper/report-ready.
+
+## Replication Target
+
+This repository is an independent replication and extension workspace for
+Gausen, Luk, and Guo's agent-based model of algorithmic newsfeed curation on
+social media. The core replication compares four feed objectives:
+chronological, belief-based, popularity-based, and random curation.
+
+The first implementation target is a synthetic ABM that reproduces the study's
+qualitative behavior before attempting full original-data calibration.
+
+## Replication Design Criteria
+
+The original paper's literature-review questions should be treated as
+capability checks for this replication:
+
+1. Misinformation modeling: model false and non-false story diffusion in a way
+   comparable to the original study.
+2. Social network ABM: represent a Twitter-like social media network with agents
+   and follower/followee structure.
+3. Empirical calibration and validation: support real social media cascade data
+   for calibration and validation when legally obtainable.
+4. Agent belief modeling: include agent beliefs and belief-updating behavior
+   sufficient to compute belief purity.
+5. Newsfeed curation modeling: implement chronological, belief-based,
+   popularity-based, and random feed objectives.
+
+These are not replacements for the repository's empirical research questions;
+they define what the model must contain before results should be interpreted as
+a faithful replication.
+
+## Model Summary
+
+- Agents represent Twitter-like users on a Barabasi-Albert social network.
+- Baseline agent states are `susceptible`, `believe`, `deny`, and `cured`.
+- Agents may go online, post, view a curated feed, reshare, update belief, or
+  reject a previous belief according to configured probabilities.
+- Candidate feed items come from neighboring/followed users; the feed objective
+  determines which posts are viewed.
+- Faithful replication should be kept separate from later extensions such as
+  semantic belief vectors, empirical networks, LLM agents, or diversity-aware
+  recommender objectives.
+
+## Core Metrics
+
+- Information spread `Phi`: proportion of story-related tweets per timestep.
+- Average and maximum `Phi` across runs and timesteps.
+- Belief purity: similarity between an agent's belief and the beliefs/content
+  represented in the viewed feed.
+- RMSE and NRMSE for chronological-baseline validation against observed cascade
+  data when available.
+
+## Baseline Parameters To Preserve
+
+- Agents: 1,000.
+- Average followers/followees: 100.
+- Average viewed posts: 40.
+- Simulations in original paper: 5 per condition.
+- False story: initial infected proportion 0.7; timesteps 80.
+- Non-false story: initial infected proportion 0.5; timesteps 40.
+- Calibrated false-story probabilities: `p_reshare=0.03669678`,
+  `p_reject=0.01459229`, `p_online=0.10714111`.
+- Calibrated non-false-story probabilities: `p_reshare=0.0770166`,
+  `p_reject=0.06335449`, `p_online=0.06335449`.
+
+Record any deviation from these values in configs, experiment notes, and result
+summaries.
+
+## Replication Risks
+
+- Dataset access: the original calibration uses historical Twitter cascades from
+  the Ma et al. rumor dataset. Raw restricted data should not be redistributed.
+- Calibration ambiguity: the paper reports calibrated values but not every
+  implementation detail, so assumptions must be explicit.
+- Chronological baseline: the validation logic depends on pre-2016 Twitter
+  chronological-feed behavior.
+- Low simulation count: the original uses 5 simulations, which supports
+  comparability but may be weak for robustness; later sensitivity runs should
+  use more repetitions.
+- Belief representation: scalar belief is useful for replication but limited;
+  semantic or multidimensional belief representations belong in extension work.
+
+## Code Structure
+
+- `src/`: stable reusable logic, shared utilities, package code, API modules, UI modules.
+- `scripts/`: runnable commands for data prep, experiments, evaluation, and exports.
+- `notebooks/`: exploratory analysis, quick inspection, and figures in progress.
+- `configs/`: parameters, paths, model settings, and experiment variants.
+- `experiments/`: experiment plans, run manifests, notes, and comparisons.
+- `docs/`: methods notes, setup guides, assumptions, and report/paper support.
+- `outputs/`: generated results, plots, tables, logs, and exports.
+
+## Prototype vs Stable Code
+
+- Start rough ideas in `notebooks/` or clearly named prototype scripts.
+- Move repeated or trusted logic into `src/`.
+- Keep runnable workflows in `scripts/` so they can be repeated outside notebooks.
+- Avoid making notebooks the only source of important transformations or results.
+- Mark exploratory code with TODOs or notes before it becomes a dependency.
+
+## Assumptions
+
+- Document assumptions near the code, config, or experiment record they affect.
+- Include assumptions about data filters, labels, models, prompts, metrics, and exclusions.
+- Prefer explicit defaults in configs over hidden constants.
+- Record known limitations before interpreting results.
+
+## Reproducibility
+
+- Use configs for parameters that change between runs.
+- Record command, config path, data version/path, seed, code version, and output folder.
+- Keep raw data immutable and generate processed data through scripts.
+- Write results to predictable folders under `outputs/`.
+- Validate scripts with small samples or smoke runs when full runs are expensive.
+
+## Paper / Report Readiness
+
+- Keep figure/table generation scripted when results may be cited.
+- Save result tables with clear metric names and run identifiers.
+- Keep notes that map outputs back to methods, configs, and data.
+- Document evaluation choices and failure cases.
+- Prefer readable methods code over clever abstractions.
+
+## Method Note Template
+
+```text
+Method:
+Question:
+Assumptions:
+Inputs:
+Config:
+Command:
+Outputs:
+Metrics:
+Limitations:
+```
