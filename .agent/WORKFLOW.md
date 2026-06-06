@@ -17,13 +17,15 @@ Use this as the default operating loop for coding-agent work.
    guide, data rules, and task log.
 2. Synthetic MVP replication: implement a minimal Python ABM using synthetic
    network/cascade behavior before relying on restricted external data.
-3. Original parameter replication: encode the fixed parameters and calibrated
+3. Observed cascade reconstruction: convert local ACL2017 propagation trees into
+   event tables and observed `Phi` time series.
+4. Original parameter replication: encode the fixed parameters and calibrated
    probabilities reported in the paper.
-4. Calibration and validation: fit the chronological-feed baseline to available
+5. Calibration and validation: fit the chronological-feed baseline to available
    cascade data and report RMSE/NRMSE.
-5. Counterfactual feed comparison: run chronological, belief-based,
+6. Counterfactual feed comparison: run chronological, belief-based,
    popularity-based, and random feed objectives under comparable settings.
-6. Sensitivity and extension experiments: test robustness, then add NLP, SNA, or
+7. Sensitivity and extension experiments: test robustness, then add NLP, SNA, or
    recommender-system extensions only after the replication baseline is stable.
 
 ## Before Editing

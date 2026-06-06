@@ -4,8 +4,8 @@ Use this file for durable continuity across coding-agent sessions. Keep entries 
 
 ## Active Context
 
-- Current objective: curate preliminary setup docs for Social Feed ABM
-  Replication and implement the Phase 1 data-assisted MVP scaffold.
+- Current objective: implement Phase 2 observed cascade reconstruction for
+  chronological calibration targets.
 - Current branch/status: initial template customization; many template files are
   newly added or unstaged.
 - Important open question: dependency management and final package layout are
@@ -23,6 +23,7 @@ Use this file for durable continuity across coding-agent sessions. Keep entries 
 | 2026-06-05 | Expected stack is Python ABM with NetworkX, NumPy/Pandas, SciPy or scikit-learn later, and Matplotlib/Seaborn. | Aligns with the replication plan while deferring dependency installation. |
 | 2026-06-05 | Treat the paper's five related-work questions as replication design criteria. | They define required model capabilities, while the repo RQs remain outcome-oriented. |
 | 2026-06-05 | Phase 1 uses ACL2017 Twitter15 cases and minimal dependencies. | The local dataset contains the paper's named cases, and the current environment lacks pandas, NetworkX, PyYAML, and matplotlib. |
+| 2026-06-05 | Phase 2 reconstructs observed cascades with hourly bins and source events excluded from `Phi`. | Creates validation targets while preserving source events for lineage. |
 
 ## Recent Tasks
 
@@ -33,10 +34,10 @@ Use this file for durable continuity across coding-agent sessions. Keep entries 
 | 2026-06-05 | Rewrote public project overview and added data documentation. | `README.md`, `data/README.md` | `python3 scripts/check_repo.py` passed. | Documentation-only; no ABM code or dependencies added. |
 | 2026-06-05 | Added paper-derived replication design criteria to docs. | `README.md`, `.agent/PROJECT_BRIEF.md`, `.agent/RESEARCH_PROJECT_GUIDE.md`, `.agent/TASK_LOG.md` | `python3 scripts/check_repo.py` passed. | Contextualizes the original paper's five questions for replication. |
 | 2026-06-05 | Implemented Phase 1 data-assisted MVP scaffold. | `src/social_feed_abm/`, scripts, `configs/phase1_acl2017_cases.json`, tests, docs | `python3 scripts/check_repo.py`; `python3 -m unittest discover`; Phase 1 prep and run scripts passed. | Uses ACL2017 summaries and synthetic counterfactual feed runs; no new dependencies. |
+| 2026-06-05 | Implemented Phase 2 observed cascade reconstruction. | `src/social_feed_abm/observed.py`, `scripts/prepare_observed_cascades.py`, `configs/phase2_observed_cascades.json`, tests, docs | `python3 scripts/check_repo.py`; `python3 -m unittest discover`; Phase 2 observed-cascade script passed. | Produces event tables, padded `Phi` series, combined summary, and manifest. |
 
 ## Follow-Ups
 
 - Decide dependency management before adding packages.
-- Review `configs/phase1_acl2017_cases.json` before adding calibration-specific
-  configs.
-- Review Phase 1 output shape before adding full calibration search or plotting.
+- Review Phase 2 observed `Phi` series before adding chronological calibration.
+- Add calibration config and random-search baseline for RMSE/NRMSE.

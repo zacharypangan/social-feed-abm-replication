@@ -62,37 +62,43 @@ Local Phase 1 notes:
   but it is not used by the Phase 1 MVP.
 - Both raw dataset folders should remain ignored by Git.
 
-## Planned Cascade Schema
+## Observed Cascade Schema
 
-The exact schema will be finalized during data preprocessing. Expected fields
-for processed cascade records include:
+Phase 2 reconstructs observed cascade events from ACL2017 propagation trees.
+Generated outputs are written to `outputs/phase2_observed_cascades/` and remain
+ignored by Git.
+
+Per-case event rows include:
 
 ```text
 story_id
-story_label
-is_false_or_rumor
-post_id
+case_name
+label
+source_tweet_id
+parent_user_id
+parent_tweet_id
 user_id
-parent_post_id
-timestamp
+tweet_id
+delay_minutes
 timestep
 event_type
-retweet_count
-follower_count
-source_dataset
 ```
 
-Network or user-level processed data may additionally include:
+`event_type` is `source` for the `ROOT -> source` edge and `propagation` for all
+non-root propagation edges. Phase 2 preserves source events in event tables but
+excludes them from `Phi` by default.
+
+Per-case `Phi` rows include:
 
 ```text
-user_id
-followee_id
-follower_id
-degree
-verified
-initial_belief
-initial_state
+timestep
+event_count
+phi
 ```
+
+The default binning is hourly: `timestep = floor(delay_minutes / 60)`. The
+default denominator is `n_agents=1000`, matching the paper's ABM population as a
+Phase 2 approximation.
 
 ## Lineage Record Template
 
@@ -122,4 +128,6 @@ Notes:
   planning, but raw files are not intended for GitHub.
 - Phase 1 uses ACL2017 Twitter15 case summaries and synthetic counterfactual
   simulation outputs.
+- Phase 2 reconstructs observed ACL2017 cascade events and padded `Phi` series
+  for future chronological calibration and validation.
 - External redistribution constraints remain unresolved.

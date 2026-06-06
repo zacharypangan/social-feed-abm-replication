@@ -53,6 +53,20 @@ a faithful replication.
 - RMSE and NRMSE for chronological-baseline validation against observed cascade
   data when available.
 
+## Observed Cascade Reconstruction
+
+Phase 2 reconstructs observed validation targets from ACL2017 propagation trees.
+Each tree edge becomes an event row. The `ROOT -> source` edge is preserved as a
+`source` event for lineage but excluded from observed `Phi` by default.
+
+- Default time bin: hourly, using `floor(delay_minutes / 60)`.
+- Default `Phi` denominator: `n_agents=1000`, matching the paper's baseline ABM
+  population as an approximation.
+- False cases are padded to 80 timesteps; the non-rumor case is padded to 40
+  timesteps.
+- Generated observed outputs live under `outputs/phase2_observed_cascades/` and
+  should remain ignored by Git.
+
 ## Baseline Parameters To Preserve
 
 - Agents: 1,000.

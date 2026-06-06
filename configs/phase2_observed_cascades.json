@@ -1,0 +1,39 @@
+{
+  "project": {
+    "name": "social-feed-abm-replication",
+    "phase": "phase2_observed_cascade_reconstruction"
+  },
+  "data": {
+    "acl2017_root": "data/rumor_detection_acl2017",
+    "dataset": "twitter15",
+    "output_dir": "outputs/phase2_observed_cascades"
+  },
+  "observed_cascade": {
+    "time_bin_minutes": 60,
+    "phi_denominator_n_agents": 1000,
+    "source_events_count_for_phi": false
+  },
+  "selected_cases": [
+    {
+      "case_name": "false_tupac_hiding",
+      "story_id": "505369323922522113",
+      "expected_label": "false",
+      "role": "original_false_case",
+      "timesteps": 80
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "story_id": "692812029611089920",
+      "expected_label": "non-rumor",
+      "role": "original_non_false_case",
+      "timesteps": 40
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "story_id": "553960736964476928",
+      "expected_label": "false",
+      "role": "additional_false_case",
+      "timesteps": 80
+    }
+  ]
+}

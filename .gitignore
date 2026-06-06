@@ -63,6 +63,8 @@ data/rumor_detection_acl2017/
 data/FakeNewsNet dataset/
 outputs/*
 !outputs/.gitkeep
+!outputs/replication-dashboard/
+!outputs/replication-dashboard/**
 
 # Model artifacts and checkpoints
 checkpoints/

@@ -1,0 +1,14 @@
+{
+  "name": "social-feed-abm-replication-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static progress dashboard for the Social Feed ABM replication.",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "HOST=0.0.0.0 node scripts/serve.mjs",
+    "check": "node scripts/check-data.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

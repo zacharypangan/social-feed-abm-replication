@@ -12,7 +12,7 @@ def load_config(path: Path) -> dict[str, Any]:
 
     with path.open(encoding="utf-8") as handle:
         config = json.load(handle)
-    _require(config, ["project", "seed", "data", "selected_cases", "simulation"])
+    _require(config, ["project", "data", "selected_cases"])
     return config
 
 

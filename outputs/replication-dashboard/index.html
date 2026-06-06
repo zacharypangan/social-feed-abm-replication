@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Social Feed ABM Replication Dashboard</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Replication progress dashboard</p>
+        <h1>Social Feed ABM Replication</h1>
+      </div>
+      <div class="status-pill" id="overall-status">Loading</div>
+    </header>
+
+    <main>
+      <section class="summary-grid" id="summary-grid" aria-label="Replication summary"></section>
+
+      <section class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Phase status</p>
+            <h2>Progress Toward Paper Replication</h2>
+          </div>
+        </div>
+        <div class="phase-grid" id="phase-grid"></div>
+      </section>
+
+      <section class="band two-col">
+        <div>
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">Faithfulness</p>
+              <h2>Paper Design Criteria</h2>
+            </div>
+          </div>
+          <div class="criteria-list" id="criteria-list"></div>
+        </div>
+        <div>
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">Provenance</p>
+              <h2>Data And Outputs</h2>
+            </div>
+          </div>
+          <div class="provenance-list" id="provenance-list"></div>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Cases</p>
+            <h2>Observed Cascades And MVP Simulation Metrics</h2>
+          </div>
+        </div>
+        <div class="case-grid" id="case-grid"></div>
+      </section>
+    </main>
+
+    <script type="module" src="assets/app.js"></script>
+  </body>
+</html>

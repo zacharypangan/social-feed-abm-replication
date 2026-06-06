@@ -70,11 +70,12 @@ replication path is working.
 
 ## Current Status
 
-This repository has a Phase 1 data-assisted MVP scaffold. It includes local-only
-ACL2017 case preprocessing, a dependency-light synthetic ABM runner, and
-documentation for keeping restricted raw data out of GitHub. It does not yet
-include full calibration search, plotted figures, or validated replication
-results.
+This repository has Phase 1 and Phase 2 replication scaffolds. Phase 1 includes
+local-only ACL2017 case preprocessing and a dependency-light synthetic ABM
+runner. Phase 2 reconstructs observed cascade event tables and `Phi` time series
+from the ACL2017 propagation trees for the paper-relevant Twitter15 cases. The
+project does not yet include full calibration search, plotted figures, or
+validated replication results.
 
 Current validation command:
 
@@ -83,17 +84,18 @@ python3 scripts/check_repo.py
 python3 -m unittest discover
 python3 scripts/prepare_acl2017_cases.py --config configs/phase1_acl2017_cases.json
 python3 scripts/run_phase1_mvp.py --config configs/phase1_acl2017_cases.json
+python3 scripts/prepare_observed_cascades.py --config configs/phase2_observed_cascades.json
 ```
 
 ## Planned Workflow
 
 1. Curate project docs, data policy, and reproducibility conventions.
 2. Implement a synthetic ABM smoke workflow.
-3. Encode original fixed parameters and calibrated probabilities.
-4. Reproduce the four feed curation comparisons on synthetic runs.
-5. Add original-data preprocessing, calibration, and validation if the required
-   cascade data can be obtained and used under its license.
-6. Run sensitivity checks and extensions.
+3. Reconstruct observed cascade event tables and `Phi` time series.
+4. Encode original fixed parameters and calibrated probabilities.
+5. Fit and validate the chronological baseline with RMSE/NRMSE.
+6. Reproduce the four feed curation comparisons.
+7. Run sensitivity checks and extensions.
 
 ## Data
 

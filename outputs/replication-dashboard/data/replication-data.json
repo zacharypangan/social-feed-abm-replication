@@ -1,0 +1,227 @@
+{
+  "project": {
+    "name": "Social Feed ABM Replication",
+    "updated": "2026-06-05",
+    "status": "Phase 2 complete; calibration not started"
+  },
+  "phases": [
+    {
+      "name": "Phase 1: Data-assisted MVP",
+      "status": "complete",
+      "description": "Parsed paper-relevant ACL2017 cases and ran dependency-light synthetic counterfactual feed simulations.",
+      "evidence": "outputs/phase1_acl2017/simulations/metrics_summary.json"
+    },
+    {
+      "name": "Phase 2: Observed cascades",
+      "status": "complete",
+      "description": "Reconstructed observed event tables and hourly Phi targets from ACL2017 propagation trees.",
+      "evidence": "outputs/phase2_observed_cascades/observed_phi_summary.json"
+    },
+    {
+      "name": "Phase 3: Model fidelity upgrade",
+      "status": "next",
+      "description": "Refactor the MVP ABM toward paper-faithful agent, tweet, belief update, and popularity-feedback mechanics.",
+      "evidence": "Not implemented"
+    },
+    {
+      "name": "Phase 4: Calibration and validation",
+      "status": "pending",
+      "description": "Fit chronological simulations to observed Phi targets and report RMSE/NRMSE.",
+      "evidence": "Not implemented"
+    }
+  ],
+  "faithfulness": [
+    {
+      "name": "Misinformation modeling",
+      "status": "partial",
+      "assessment": "False and non-rumor cases are selected and labeled; full misinformation behavior calibration remains future work."
+    },
+    {
+      "name": "Social network ABM",
+      "status": "partial",
+      "assessment": "A synthetic preferential-attachment-like MVP network exists; it is not yet calibrated to real follower data."
+    },
+    {
+      "name": "Empirical calibration and validation",
+      "status": "partial",
+      "assessment": "Observed Phi targets are reconstructed; chronological fitting and RMSE/NRMSE are not implemented yet."
+    },
+    {
+      "name": "Agent belief modeling",
+      "status": "partial",
+      "assessment": "Scalar beliefs and belief purity are present in MVP simulation; paper-faithful belief update logic needs refinement."
+    },
+    {
+      "name": "Newsfeed curation algorithms",
+      "status": "complete",
+      "assessment": "Chronological, belief-based, popularity-based, and random feed objectives are implemented in MVP form."
+    }
+  ],
+  "provenance": {
+    "inputs": [
+      {
+        "name": "ACL2017 Twitter15 propagation trees",
+        "path": "data/rumor_detection_acl2017/twitter15/",
+        "role": "Local-only raw cascade source; ignored by Git"
+      },
+      {
+        "name": "Phase 1 config",
+        "path": "configs/phase1_acl2017_cases.json",
+        "role": "Selected cases, paper parameters, and MVP simulation settings"
+      },
+      {
+        "name": "Phase 2 config",
+        "path": "configs/phase2_observed_cascades.json",
+        "role": "Observed cascade reconstruction settings"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Phase 1 simulation metrics",
+        "path": "outputs/phase1_acl2017/simulations/metrics_summary.json",
+        "role": "Generated, ignored by Git"
+      },
+      {
+        "name": "Phase 2 observed Phi summary",
+        "path": "outputs/phase2_observed_cascades/observed_phi_summary.json",
+        "role": "Generated, ignored by Git"
+      },
+      {
+        "name": "Dashboard data snapshot",
+        "path": "outputs/replication-dashboard/data/replication-data.json",
+        "role": "Sanitized tracked summary for public progress dashboard"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "case_name": "false_tupac_hiding",
+      "story_id": "505369323922522113",
+      "label": "false",
+      "role": "original_false_case",
+      "observed": {
+        "event_count": 339,
+        "counted_event_count": 338,
+        "source_event_count": 1,
+        "propagation_event_count": 338,
+        "horizon_timesteps": 80,
+        "observed_phi_avg": 0.0037875,
+        "observed_phi_max": 0.073,
+        "time_bin_minutes": 60,
+        "phi_denominator_n_agents": 1000
+      },
+      "simulated_feeds": [
+        {
+          "feed_algorithm": "chronological",
+          "phi_avg_mean": 0.0036575,
+          "phi_max_mean": 0.0084,
+          "belief_purity_avg_mean": 0.6657084494
+        },
+        {
+          "feed_algorithm": "belief",
+          "phi_avg_mean": 0.00362,
+          "phi_max_mean": 0.0084,
+          "belief_purity_avg_mean": 0.8567762025
+        },
+        {
+          "feed_algorithm": "popularity",
+          "phi_avg_mean": 0.003705,
+          "phi_max_mean": 0.0096,
+          "belief_purity_avg_mean": 0.6634840104
+        },
+        {
+          "feed_algorithm": "random",
+          "phi_avg_mean": 0.003885,
+          "phi_max_mean": 0.0094,
+          "belief_purity_avg_mean": 0.6680512273
+        }
+      ]
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "story_id": "692812029611089920",
+      "label": "non-rumor",
+      "role": "original_non_false_case",
+      "observed": {
+        "event_count": 3009,
+        "counted_event_count": 3008,
+        "source_event_count": 1,
+        "propagation_event_count": 3008,
+        "horizon_timesteps": 40,
+        "observed_phi_avg": 0.0569,
+        "observed_phi_max": 0.866,
+        "time_bin_minutes": 60,
+        "phi_denominator_n_agents": 1000
+      },
+      "simulated_feeds": [
+        {
+          "feed_algorithm": "chronological",
+          "phi_avg_mean": 0.0044,
+          "phi_max_mean": 0.01,
+          "belief_purity_avg_mean": 0.6730993779
+        },
+        {
+          "feed_algorithm": "belief",
+          "phi_avg_mean": 0.004625,
+          "phi_max_mean": 0.0108,
+          "belief_purity_avg_mean": 0.7899039745
+        },
+        {
+          "feed_algorithm": "popularity",
+          "phi_avg_mean": 0.004405,
+          "phi_max_mean": 0.0088,
+          "belief_purity_avg_mean": 0.6720491274
+        },
+        {
+          "feed_algorithm": "random",
+          "phi_avg_mean": 0.00466,
+          "phi_max_mean": 0.0108,
+          "belief_purity_avg_mean": 0.6688358508
+        }
+      ]
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "story_id": "553960736964476928",
+      "label": "false",
+      "role": "additional_false_case",
+      "observed": {
+        "event_count": 294,
+        "counted_event_count": 293,
+        "source_event_count": 1,
+        "propagation_event_count": 293,
+        "horizon_timesteps": 80,
+        "observed_phi_avg": 0.003625,
+        "observed_phi_max": 0.045,
+        "time_bin_minutes": 60,
+        "phi_denominator_n_agents": 1000
+      },
+      "simulated_feeds": [
+        {
+          "feed_algorithm": "chronological",
+          "phi_avg_mean": 0.0037375,
+          "phi_max_mean": 0.0098,
+          "belief_purity_avg_mean": 0.6689171414
+        },
+        {
+          "feed_algorithm": "belief",
+          "phi_avg_mean": 0.0038725,
+          "phi_max_mean": 0.0094,
+          "belief_purity_avg_mean": 0.8538336473
+        },
+        {
+          "feed_algorithm": "popularity",
+          "phi_avg_mean": 0.0037525,
+          "phi_max_mean": 0.0096,
+          "belief_purity_avg_mean": 0.6729064353
+        },
+        {
+          "feed_algorithm": "random",
+          "phi_avg_mean": 0.0038,
+          "phi_max_mean": 0.0104,
+          "belief_purity_avg_mean": 0.6743738417
+        }
+      ]
+    }
+  ]
+}

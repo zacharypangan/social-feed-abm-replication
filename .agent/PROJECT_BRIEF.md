@@ -11,8 +11,8 @@ Use this file to give future Codex sessions high-signal project context.
   Gausen, Luk, and Guo's study on algorithmic newsfeed curation, measuring how
   chronological, belief-based, popularity-based, and random feed objectives
   affect information spread, belief purity, and validation fit.
-- Current stage: Phase 1 data-assisted MVP scaffold using local ACL2017 case
-  summaries and synthetic counterfactual feed runs.
+- Current stage: Phase 2 observed cascade reconstruction using local ACL2017
+  propagation trees as validation targets.
 - Main stakeholders/users: the project owner, future research collaborators,
   reviewers of a public GitHub replication package, and readers of a future
   paper or technical report.
@@ -63,7 +63,9 @@ Use this file to give future Codex sessions high-signal project context.
 - Lint/typecheck: not defined yet.
 - Run experiment: `python3 scripts/prepare_acl2017_cases.py --config
   configs/phase1_acl2017_cases.json`, then `python3 scripts/run_phase1_mvp.py
-  --config configs/phase1_acl2017_cases.json`.
+  --config configs/phase1_acl2017_cases.json`, then `python3
+  scripts/prepare_observed_cascades.py --config
+  configs/phase2_observed_cascades.json`.
 - Run backend/dashboard/frontend: not applicable in the current preliminary
   phase.
 
@@ -85,8 +87,8 @@ Use this file to give future Codex sessions high-signal project context.
 
 ## Current Priorities
 
-- Review Phase 1 MVP outputs and decide what qualifies as the next calibration
-  target.
+- Review Phase 2 observed `Phi` outputs and use them as chronological
+  calibration targets.
 - Replace template placeholder tests once Phase 1 coverage is stable.
 - Decide dependency management before adding plotting, pandas, NetworkX, or
   calibration search.

@@ -29,6 +29,20 @@ Record how each output dataset or result was produced:
 - Row counts before and after processing.
 - Filters, exclusions, joins, and label transformations.
 
+## Observed Cascade Records
+
+For Phase 2 observed cascade reconstruction, record:
+
+- Config path, especially `time_bin_minutes`, selected cases, and `Phi`
+  denominator.
+- Raw ACL2017 dataset path and dataset split.
+- Whether `ROOT -> source` events are counted in `Phi`.
+- Event table output path.
+- `Phi` time-series output path.
+- Horizon/padding rule for each case.
+- Any approximation relative to the original paper, especially use of
+  `n_agents=1000` as the observed `Phi` denominator.
+
 ## Outputs
 
 - Write generated artifacts under `outputs/`.
