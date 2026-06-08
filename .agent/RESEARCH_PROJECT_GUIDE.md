@@ -86,6 +86,43 @@ Phase 3 is still not calibrated against real follower networks or cascade
 curves. Treat it as the model-fidelity baseline that Phase 4 will fit and
 validate against Phase 2 observed targets.
 
+## Phase 4 Chronological Calibration
+
+Phase 4 calibrates the chronological-feed baseline against Phase 2 observed
+`Phi` targets:
+
+- Inputs: Phase 2 per-case `phi_by_timestep.json` files.
+- Model: Phase 3-style synthetic ABM with the chronological feed objective.
+- Search: small deterministic multiplier grid around the paper-reported
+  `p_online`, `p_reshare`, and `p_reject` probabilities.
+- Repetitions: currently 3 simulations per candidate for a lightweight
+  executable baseline.
+- Metrics: RMSE and NRMSE between observed `Phi` and averaged simulated `Phi`.
+- Selection: lowest NRMSE, with RMSE as the tie breaker.
+
+This phase establishes an executable validation workflow. It should not be
+treated as final paper replication quality until the search space, simulation
+count, and model assumptions are reviewed.
+
+## Phase 5 Case-Study Counterfactuals
+
+Phase 5 is aligned with the paper's case-study design:
+
+- Inputs: Phase 4 best chronological calibration records for the Tupac,
+  Justin Bieber, and Helric Fredou cases.
+- Feed objectives: chronological, popularity-based, belief-based, and random.
+- Repetitions: 5 simulations per feed condition, matching the original paper's
+  reported simulation count.
+- Metrics: `Phi_avg`, `Phi_max`, belief purity, and paper-style relative
+  changes against the chronological baseline.
+- FakeNewsNet: used only as a parameter-context audit from local tweet-ID
+  metadata, not as a propagation-cascade validation target.
+
+Full ACL2017/FakeNewsNet generalization is a later robustness phase, because
+the paper states that additional case studies do not enrich case-dependent
+calibration/validation and suggests average propagation patterns as future
+work.
+
 ## Baseline Parameters To Preserve
 
 - Agents: 1,000.

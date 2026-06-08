@@ -24,10 +24,14 @@ Use this as the default operating loop for coding-agent work.
    synthetic network.
 5. Calibration and validation: fit the chronological-feed baseline to available
    cascade data and report RMSE/NRMSE.
-6. Counterfactual feed comparison: run chronological, belief-based,
-   popularity-based, and random feed objectives under comparable settings.
-7. Sensitivity and extension experiments: test robustness, then add NLP, SNA, or
-   recommender-system extensions only after the replication baseline is stable.
+6. Calibrated counterfactual feed comparison: run chronological, belief-based,
+   popularity-based, and random feed objectives using calibrated probability
+   records.
+7. Paper-style outputs: generate figures, tables, and narrative method notes
+   for replication results.
+8. Full-dataset robustness and extension experiments: test broader ACL2017 and
+   FakeNewsNet summaries, then add NLP, SNA, or recommender-system extensions
+   only after the replication baseline is stable.
 
 ## Before Editing
 

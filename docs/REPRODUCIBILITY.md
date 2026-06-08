@@ -58,6 +58,34 @@ For Phase 3 model-fidelity runs, record:
 - Assumption that ACL2017 cascades select cases but do not calibrate the
   synthetic network yet.
 
+## Phase 4 Calibration Records
+
+For Phase 4 chronological calibration runs, record:
+
+- Config path and candidate multiplier grid.
+- Observed Phase 2 `Phi` target path for each case.
+- Feed objective, currently chronological only.
+- Candidate probabilities for `p_online`, `p_reshare`, and `p_reject`.
+- Seed and number of simulations per candidate.
+- Averaged simulated `Phi` series.
+- RMSE and NRMSE for each candidate.
+- Best-candidate selection rule.
+- Assumption that this is a lightweight executable grid, not a final
+  calibration search.
+
+## Phase 5 Counterfactual Records
+
+For Phase 5 case-study counterfactual runs, record:
+
+- Config path and Phase 4 calibration output path.
+- Case ID, calibrated probabilities, feed objective, seed, and run index.
+- Number of simulations per feed condition.
+- Per-feed `Phi_avg`, `Phi_max`, belief purity, and event summaries.
+- Paper-style relative changes against chronological baseline.
+- FakeNewsNet audit summaries as parameter context only.
+- Assumption that full-dataset average propagation analysis is a later
+  robustness phase, not the faithful paper replication target.
+
 ## Outputs
 
 - Write generated artifacts under `outputs/`.

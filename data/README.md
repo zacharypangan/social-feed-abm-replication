@@ -121,6 +121,37 @@ The Phase 3 event trace records simulated `online`, `feed_view`,
 `belief_update`, `reshare`, `reject`, `believe`, and `deny` counts per timestep.
 These are simulated process records, not observed ACL2017 events.
 
+## Phase 4 Calibration Outputs
+
+Phase 4 reads the Phase 2 observed `Phi` targets and runs chronological
+Phase 3-style simulations over a small probability grid. Generated outputs are
+written to `outputs/phase4_calibration_validation/` and remain ignored by Git.
+
+Top-level Phase 4 outputs include:
+
+```text
+candidate_scores.csv
+candidate_scores.json
+best_calibration_summary.csv
+best_calibration_summary.json
+manifest.json
+```
+
+Per-case folders include all candidate scores, run records, best-candidate
+metadata, and observed-versus-predicted `Phi` rows for each candidate.
+
+## Phase 5 Counterfactual Outputs
+
+Phase 5 uses the three paper case studies, not the entire ACL2017 dataset, to
+match the original study's case-study design. It applies each case's Phase 4
+best chronological calibration to all four feed objectives and computes
+paper-style relative changes against the chronological baseline.
+
+Generated outputs are written to
+`outputs/phase5_case_study_counterfactuals/` and remain ignored by Git.
+FakeNewsNet is summarized only as a parameter-context audit using article-level
+tweet-ID counts; it is not treated as a propagation-cascade validation target.
+
 ## Lineage Record Template
 
 Use this template for each real or synthetic dataset:
@@ -153,4 +184,8 @@ Notes:
   for future chronological calibration and validation.
 - Phase 3 adds simulated event/state traces and popularity-feedback mechanics
   while keeping the network synthetic and uncalibrated.
+- Phase 4 calibrates chronological simulations against observed `Phi` targets
+  using RMSE/NRMSE; the search is intentionally small and dependency-light.
+- Phase 5 runs calibrated paper-style counterfactual comparisons and audits
+  FakeNewsNet tweet-ID volume as context.
 - External redistribution constraints remain unresolved.

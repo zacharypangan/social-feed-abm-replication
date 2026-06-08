@@ -2,7 +2,7 @@
   "project": {
     "name": "Social Feed ABM Replication",
     "updated": "2026-06-08",
-    "status": "Phase 3 complete; calibration not started"
+    "status": "Phase 5 complete; paper-style outputs next"
   },
   "phases": [
     {
@@ -25,8 +25,20 @@
     },
     {
       "name": "Phase 4: Calibration and validation",
+      "status": "complete",
+      "description": "Fit chronological simulations to observed Phi targets with a small probability grid and reported RMSE/NRMSE.",
+      "evidence": "outputs/phase4_calibration_validation/best_calibration_summary.json"
+    },
+    {
+      "name": "Phase 5: Calibrated feed comparison",
+      "status": "complete",
+      "description": "Ran calibrated chronological, popularity, belief, and random feed comparisons for the paper case studies.",
+      "evidence": "outputs/phase5_case_study_counterfactuals/paper_table_rows.json"
+    },
+    {
+      "name": "Phase 6: Paper-style outputs",
       "status": "next",
-      "description": "Fit chronological simulations to observed Phi targets and report RMSE/NRMSE.",
+      "description": "Generate paper-style figures, tables, and method notes for replication results.",
       "evidence": "Not implemented"
     }
   ],
@@ -44,7 +56,7 @@
     {
       "name": "Empirical calibration and validation",
       "status": "partial",
-      "assessment": "Observed Phi targets are reconstructed; chronological fitting and RMSE/NRMSE are not implemented yet."
+      "assessment": "Observed Phi targets, chronological RMSE/NRMSE fitting, and calibrated four-feed case-study comparisons are implemented; final paper-quality plots remain future work."
     },
     {
       "name": "Agent belief modeling",
@@ -54,7 +66,7 @@
     {
       "name": "Newsfeed curation algorithms",
       "status": "complete",
-      "assessment": "Chronological, belief-based, popularity-based, and random feed objectives are implemented in MVP form."
+      "assessment": "Chronological, popularity-based, belief-based, and random objectives are implemented and compared under calibrated case-study parameters."
     }
   ],
   "provenance": {
@@ -78,6 +90,16 @@
         "name": "Phase 3 config",
         "path": "configs/phase3_model_fidelity.json",
         "role": "Model-fidelity simulation settings"
+      },
+      {
+        "name": "Phase 4 config",
+        "path": "configs/phase4_calibration_validation.json",
+        "role": "Chronological calibration settings"
+      },
+      {
+        "name": "Phase 5 config",
+        "path": "configs/phase5_case_study_counterfactuals.json",
+        "role": "Calibrated case-study counterfactual settings"
       }
     ],
     "outputs": [
@@ -94,6 +116,21 @@
       {
         "name": "Phase 3 simulation metrics",
         "path": "outputs/phase3_model_fidelity/simulations/metrics_summary.json",
+        "role": "Generated, ignored by Git"
+      },
+      {
+        "name": "Phase 4 calibration summary",
+        "path": "outputs/phase4_calibration_validation/best_calibration_summary.json",
+        "role": "Generated, ignored by Git"
+      },
+      {
+        "name": "Phase 5 paper table rows",
+        "path": "outputs/phase5_case_study_counterfactuals/paper_table_rows.json",
+        "role": "Generated, ignored by Git"
+      },
+      {
+        "name": "FakeNewsNet parameter audit",
+        "path": "outputs/phase5_case_study_counterfactuals/fakenewsnet_parameter_audit.json",
         "role": "Generated, ignored by Git"
       },
       {
@@ -120,50 +157,615 @@
         "time_bin_minutes": 60,
         "phi_denominator_n_agents": 1000
       },
+      "calibration": {
+        "phase": "phase4_chronological_calibration_validation",
+        "feed_algorithm": "chronological",
+        "candidate_index": 3,
+        "n_sims": 3,
+        "rmse": 0.0101904094,
+        "nrmse": 0.1395946498,
+        "p_online": 0.10714111,
+        "p_reshare": 0.027522585,
+        "p_reject": 0.01459229,
+        "predicted_phi_avg": 0.0024958333,
+        "predicted_phi_max": 0.005
+      },
       "simulated_feeds": [
         {
+          "belief_purity_avg_mean": 0.7459923047543379,
+          "believe_events_mean": 52.2,
+          "calibration_candidate_index": 3,
+          "case_name": "false_tupac_hiding",
+          "deny_events_mean": 54.2,
           "feed_algorithm": "chronological",
-          "simulation_phase": "phase3_model_fidelity",
-          "phi_avg_mean": 0.0034825,
-          "phi_max_mean": 0.0084,
-          "belief_purity_avg_mean": 0.7526417355,
-          "online_events_mean": 8514.8,
-          "reshare_events_mean": 278.6,
-          "believe_events_mean": 63.2,
-          "deny_events_mean": 56.4
+          "label": "false",
+          "n_sims": 5,
+          "online_events_mean": 8589.2,
+          "p_online": 0.10714111,
+          "p_reject": 0.01459229,
+          "p_reshare": 0.027522585,
+          "phi_avg_mean": 0.002685,
+          "phi_max_mean": 0.0076,
+          "reshare_events_mean": 214.8,
+          "role": "original_false_case",
+          "story_id": "505369323922522113",
+          "total_story_tweets_mean": 214.8
         },
         {
-          "feed_algorithm": "belief",
-          "simulation_phase": "phase3_model_fidelity",
-          "phi_avg_mean": 0.0036125,
-          "phi_max_mean": 0.0086,
-          "belief_purity_avg_mean": 0.8808322501,
-          "online_events_mean": 8557.8,
-          "reshare_events_mean": 289,
-          "believe_events_mean": 82.2,
-          "deny_events_mean": 0
-        },
-        {
+          "belief_purity_avg_mean": 0.7391375240643048,
+          "believe_events_mean": 50,
+          "calibration_candidate_index": 3,
+          "case_name": "false_tupac_hiding",
+          "deny_events_mean": 56.2,
           "feed_algorithm": "popularity",
-          "simulation_phase": "phase3_model_fidelity",
-          "phi_avg_mean": 0.00356,
-          "phi_max_mean": 0.0082,
-          "belief_purity_avg_mean": 0.7325420874,
-          "online_events_mean": 8623.6,
-          "reshare_events_mean": 284.8,
-          "believe_events_mean": 65.2,
-          "deny_events_mean": 53.8
+          "label": "false",
+          "n_sims": 5,
+          "online_events_mean": 8586.2,
+          "p_online": 0.10714111,
+          "p_reject": 0.01459229,
+          "p_reshare": 0.027522585,
+          "phi_avg_mean": 0.0026775,
+          "phi_max_mean": 0.007,
+          "reshare_events_mean": 214.2,
+          "role": "original_false_case",
+          "story_id": "505369323922522113",
+          "total_story_tweets_mean": 214.2
         },
         {
+          "belief_purity_avg_mean": 0.8721998060458129,
+          "believe_events_mean": 61.2,
+          "calibration_candidate_index": 3,
+          "case_name": "false_tupac_hiding",
+          "deny_events_mean": 0,
+          "feed_algorithm": "belief",
+          "label": "false",
+          "n_sims": 5,
+          "online_events_mean": 8557.2,
+          "p_online": 0.10714111,
+          "p_reject": 0.01459229,
+          "p_reshare": 0.027522585,
+          "phi_avg_mean": 0.0028075,
+          "phi_max_mean": 0.0086,
+          "reshare_events_mean": 224.6,
+          "role": "original_false_case",
+          "story_id": "505369323922522113",
+          "total_story_tweets_mean": 224.6
+        },
+        {
+          "belief_purity_avg_mean": 0.7292474189322378,
+          "believe_events_mean": 48.8,
+          "calibration_candidate_index": 3,
+          "case_name": "false_tupac_hiding",
+          "deny_events_mean": 55,
           "feed_algorithm": "random",
-          "simulation_phase": "phase3_model_fidelity",
-          "phi_avg_mean": 0.0035125,
-          "phi_max_mean": 0.0082,
-          "belief_purity_avg_mean": 0.7324644687,
-          "online_events_mean": 8542.6,
-          "reshare_events_mean": 281,
-          "believe_events_mean": 63.6,
-          "deny_events_mean": 57.2
+          "label": "false",
+          "n_sims": 5,
+          "online_events_mean": 8604.6,
+          "p_online": 0.10714111,
+          "p_reject": 0.01459229,
+          "p_reshare": 0.027522585,
+          "phi_avg_mean": 0.00267,
+          "phi_max_mean": 0.0078,
+          "reshare_events_mean": 213.6,
+          "role": "original_false_case",
+          "story_id": "505369323922522113",
+          "total_story_tweets_mean": 213.6
+        }
+      ],
+      "feed_relative_changes": [
+        {
+          "case_name": "false_tupac_hiding",
+          "change_belief_purity": 0.0,
+          "change_phi_avg": 0.0,
+          "change_phi_max": 0.0,
+          "feed_algorithm": "chronological",
+          "label": "false"
+        },
+        {
+          "case_name": "false_tupac_hiding",
+          "change_belief_purity": -0.00918880884741892,
+          "change_phi_avg": -0.0027932960893853613,
+          "change_phi_max": -0.07894736842105261,
+          "feed_algorithm": "popularity",
+          "label": "false"
+        },
+        {
+          "case_name": "false_tupac_hiding",
+          "change_belief_purity": 0.16918070131170637,
+          "change_phi_avg": 0.045623836126629506,
+          "change_phi_max": 0.13157894736842105,
+          "feed_algorithm": "belief",
+          "label": "false"
+        },
+        {
+          "case_name": "false_tupac_hiding",
+          "change_belief_purity": -0.02244645918648496,
+          "change_phi_avg": -0.005586592178770884,
+          "change_phi_max": 0.026315789473684164,
+          "feed_algorithm": "random",
+          "label": "false"
+        }
+      ],
+      "calibration_series": [
+        {
+          "observed_phi": 0.009,
+          "predicted_phi": 0.002,
+          "residual": -0.006999999999999999,
+          "timestep": 0
+        },
+        {
+          "observed_phi": 0.073,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": -0.06933333333333333,
+          "timestep": 1
+        },
+        {
+          "observed_phi": 0.002,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0003333333333333335,
+          "timestep": 2
+        },
+        {
+          "observed_phi": 0.033,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": -0.029666666666666668,
+          "timestep": 3
+        },
+        {
+          "observed_phi": 0.011,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": -0.007333333333333332,
+          "timestep": 4
+        },
+        {
+          "observed_phi": 0.03,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": -0.027666666666666666,
+          "timestep": 5
+        },
+        {
+          "observed_phi": 0.005,
+          "predicted_phi": 0.002,
+          "residual": -0.003,
+          "timestep": 6
+        },
+        {
+          "observed_phi": 0.032,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": -0.029666666666666668,
+          "timestep": 7
+        },
+        {
+          "observed_phi": 0.002,
+          "predicted_phi": 0.002,
+          "residual": 0.0,
+          "timestep": 8
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0016666666666666668,
+          "residual": 0.0016666666666666668,
+          "timestep": 9
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0026666666666666666,
+          "timestep": 10
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": 0.0023333333333333335,
+          "timestep": 11
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.004666666666666667,
+          "residual": 0.003666666666666667,
+          "timestep": 12
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0013333333333333335,
+          "timestep": 13
+        },
+        {
+          "observed_phi": 0.005,
+          "predicted_phi": 0.002,
+          "residual": -0.003,
+          "timestep": 14
+        },
+        {
+          "observed_phi": 0.02,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": -0.016333333333333335,
+          "timestep": 15
+        },
+        {
+          "observed_phi": 0.006,
+          "predicted_phi": 0.0013333333333333333,
+          "residual": -0.004666666666666667,
+          "timestep": 16
+        },
+        {
+          "observed_phi": 0.012,
+          "predicted_phi": 0.005,
+          "residual": -0.007,
+          "timestep": 17
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0026666666666666666,
+          "timestep": 18
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0016666666666666666,
+          "timestep": 19
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.002,
+          "residual": 0.001,
+          "timestep": 20
+        },
+        {
+          "observed_phi": 0.008,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": -0.005666666666666667,
+          "timestep": 21
+        },
+        {
+          "observed_phi": 0.005,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": -0.0026666666666666666,
+          "timestep": 22
+        },
+        {
+          "observed_phi": 0.005,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": -0.0023333333333333335,
+          "timestep": 23
+        },
+        {
+          "observed_phi": 0.014,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": -0.011333333333333334,
+          "timestep": 24
+        },
+        {
+          "observed_phi": 0.002,
+          "predicted_phi": 0.002,
+          "residual": 0.0,
+          "timestep": 25
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0016666666666666668,
+          "residual": 0.0016666666666666668,
+          "timestep": 26
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0023333333333333335,
+          "timestep": 27
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0026666666666666666,
+          "timestep": 28
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0016666666666666668,
+          "residual": 0.0016666666666666668,
+          "timestep": 29
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0023333333333333335,
+          "timestep": 30
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0013333333333333335,
+          "timestep": 31
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.004333333333333333,
+          "residual": 0.004333333333333333,
+          "timestep": 32
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0016666666666666668,
+          "residual": 0.0016666666666666668,
+          "timestep": 33
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 34
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0013333333333333333,
+          "residual": 0.0013333333333333333,
+          "timestep": 35
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.001,
+          "residual": 0.001,
+          "timestep": 36
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0016666666666666668,
+          "residual": 0.0016666666666666668,
+          "timestep": 37
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0023333333333333335,
+          "timestep": 38
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0026666666666666666,
+          "timestep": 39
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0023333333333333335,
+          "timestep": 40
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0023333333333333335,
+          "timestep": 41
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.002,
+          "residual": 0.002,
+          "timestep": 42
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 43
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.002,
+          "residual": 0.002,
+          "timestep": 44
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0023333333333333335,
+          "timestep": 45
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0006666666666666666,
+          "residual": 0.0006666666666666666,
+          "timestep": 46
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.002,
+          "residual": 0.002,
+          "timestep": 47
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0013333333333333335,
+          "timestep": 48
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.003,
+          "residual": 0.002,
+          "timestep": 49
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.001,
+          "residual": 0.001,
+          "timestep": 50
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": 0.0033333333333333335,
+          "timestep": 51
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.003,
+          "residual": 0.003,
+          "timestep": 52
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.003,
+          "residual": 0.003,
+          "timestep": 53
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 54
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 55
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.004,
+          "residual": 0.004,
+          "timestep": 56
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0013333333333333333,
+          "residual": 0.0013333333333333333,
+          "timestep": 57
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0023333333333333335,
+          "timestep": 58
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0013333333333333335,
+          "timestep": 59
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.003,
+          "residual": 0.003,
+          "timestep": 60
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.001,
+          "residual": 0.001,
+          "timestep": 61
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0016666666666666668,
+          "residual": 0.0016666666666666668,
+          "timestep": 62
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.003,
+          "residual": 0.003,
+          "timestep": 63
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.002,
+          "residual": 0.002,
+          "timestep": 64
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0016666666666666668,
+          "residual": 0.0016666666666666668,
+          "timestep": 65
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 66
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.001,
+          "residual": 0.001,
+          "timestep": 67
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": 0.0033333333333333335,
+          "timestep": 68
+        },
+        {
+          "observed_phi": 0.006,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": -0.0026666666666666666,
+          "timestep": 69
+        },
+        {
+          "observed_phi": 0.006,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": -0.0026666666666666666,
+          "timestep": 70
+        },
+        {
+          "observed_phi": 0.004,
+          "predicted_phi": 0.004,
+          "residual": 0.0,
+          "timestep": 71
+        },
+        {
+          "observed_phi": 0.002,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0006666666666666665,
+          "timestep": 72
+        },
+        {
+          "observed_phi": 0.002,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0006666666666666665,
+          "timestep": 73
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0013333333333333333,
+          "residual": 0.0013333333333333333,
+          "timestep": 74
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0023333333333333335,
+          "timestep": 75
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0026666666666666666,
+          "timestep": 76
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.002,
+          "residual": 0.002,
+          "timestep": 77
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.002,
+          "residual": 0.002,
+          "timestep": 78
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0013333333333333333,
+          "residual": 0.0013333333333333333,
+          "timestep": 79
         }
       ]
     },
@@ -183,50 +785,375 @@
         "time_bin_minutes": 60,
         "phi_denominator_n_agents": 1000
       },
+      "calibration": {
+        "phase": "phase4_chronological_calibration_validation",
+        "feed_algorithm": "chronological",
+        "candidate_index": 8,
+        "n_sims": 3,
+        "rmse": 0.1437404296,
+        "nrmse": 0.1659820204,
+        "p_online": 0.0791931125,
+        "p_reshare": 0.09627075,
+        "p_reject": 0.06335449,
+        "predicted_phi_avg": 0.0067166667,
+        "predicted_phi_max": 0.0103333333
+      },
       "simulated_feeds": [
         {
+          "belief_purity_avg_mean": 0.7205531540749682,
+          "believe_events_mean": 106.2,
+          "calibration_candidate_index": 8,
+          "case_name": "nonrumor_justin_bieber_loving_himself",
+          "deny_events_mean": 88,
           "feed_algorithm": "chronological",
-          "simulation_phase": "phase3_model_fidelity",
-          "phi_avg_mean": 0.00407,
-          "phi_max_mean": 0.009,
-          "belief_purity_avg_mean": 0.70277495,
-          "online_events_mean": 2541.2,
-          "reshare_events_mean": 162.8,
-          "believe_events_mean": 77.4,
-          "deny_events_mean": 81.8
+          "label": "non-rumor",
+          "n_sims": 5,
+          "online_events_mean": 3182.4,
+          "p_online": 0.0791931125,
+          "p_reject": 0.06335449,
+          "p_reshare": 0.09627075,
+          "phi_avg_mean": 0.006265,
+          "phi_max_mean": 0.012199999999999999,
+          "reshare_events_mean": 250.6,
+          "role": "original_non_false_case",
+          "story_id": "692812029611089920",
+          "total_story_tweets_mean": 250.6
         },
         {
-          "feed_algorithm": "belief",
-          "simulation_phase": "phase3_model_fidelity",
-          "phi_avg_mean": 0.00446,
-          "phi_max_mean": 0.0092,
-          "belief_purity_avg_mean": 0.7973445571,
-          "online_events_mean": 2536,
-          "reshare_events_mean": 178.4,
-          "believe_events_mean": 88.8,
-          "deny_events_mean": 15.8
-        },
-        {
+          "belief_purity_avg_mean": 0.6987415693133522,
+          "believe_events_mean": 98.2,
+          "calibration_candidate_index": 8,
+          "case_name": "nonrumor_justin_bieber_loving_himself",
+          "deny_events_mean": 84.6,
           "feed_algorithm": "popularity",
-          "simulation_phase": "phase3_model_fidelity",
-          "phi_avg_mean": 0.003865,
-          "phi_max_mean": 0.008,
-          "belief_purity_avg_mean": 0.6946529135,
-          "online_events_mean": 2508,
-          "reshare_events_mean": 154.6,
-          "believe_events_mean": 67.2,
-          "deny_events_mean": 81.2
+          "label": "non-rumor",
+          "n_sims": 5,
+          "online_events_mean": 3152.2,
+          "p_online": 0.0791931125,
+          "p_reject": 0.06335449,
+          "p_reshare": 0.09627075,
+          "phi_avg_mean": 0.00626,
+          "phi_max_mean": 0.0124,
+          "reshare_events_mean": 250.4,
+          "role": "original_non_false_case",
+          "story_id": "692812029611089920",
+          "total_story_tweets_mean": 250.4
         },
         {
+          "belief_purity_avg_mean": 0.8221644664431138,
+          "believe_events_mean": 133.6,
+          "calibration_candidate_index": 8,
+          "case_name": "nonrumor_justin_bieber_loving_himself",
+          "deny_events_mean": 7.2,
+          "feed_algorithm": "belief",
+          "label": "non-rumor",
+          "n_sims": 5,
+          "online_events_mean": 3204,
+          "p_online": 0.0791931125,
+          "p_reject": 0.06335449,
+          "p_reshare": 0.09627075,
+          "phi_avg_mean": 0.007175,
+          "phi_max_mean": 0.013,
+          "reshare_events_mean": 287,
+          "role": "original_non_false_case",
+          "story_id": "692812029611089920",
+          "total_story_tweets_mean": 287.0
+        },
+        {
+          "belief_purity_avg_mean": 0.7097352228455354,
+          "believe_events_mean": 111.4,
+          "calibration_candidate_index": 8,
+          "case_name": "nonrumor_justin_bieber_loving_himself",
+          "deny_events_mean": 74.4,
           "feed_algorithm": "random",
-          "simulation_phase": "phase3_model_fidelity",
-          "phi_avg_mean": 0.00413,
-          "phi_max_mean": 0.0094,
-          "belief_purity_avg_mean": 0.696767419,
-          "online_events_mean": 2532.4,
-          "reshare_events_mean": 165.2,
-          "believe_events_mean": 71.8,
-          "deny_events_mean": 81
+          "label": "non-rumor",
+          "n_sims": 5,
+          "online_events_mean": 3162.8,
+          "p_online": 0.0791931125,
+          "p_reject": 0.06335449,
+          "p_reshare": 0.09627075,
+          "phi_avg_mean": 0.00638,
+          "phi_max_mean": 0.012199999999999999,
+          "reshare_events_mean": 255.2,
+          "role": "original_non_false_case",
+          "story_id": "692812029611089920",
+          "total_story_tweets_mean": 255.2
+        }
+      ],
+      "feed_relative_changes": [
+        {
+          "case_name": "nonrumor_justin_bieber_loving_himself",
+          "change_belief_purity": 0.0,
+          "change_phi_avg": 0.0,
+          "change_phi_max": 0.0,
+          "feed_algorithm": "chronological",
+          "label": "non-rumor"
+        },
+        {
+          "case_name": "nonrumor_justin_bieber_loving_himself",
+          "change_belief_purity": -0.030270611735254038,
+          "change_phi_avg": -0.000798084596967246,
+          "change_phi_max": 0.016393442622950866,
+          "feed_algorithm": "popularity",
+          "label": "non-rumor"
+        },
+        {
+          "case_name": "nonrumor_justin_bieber_loving_himself",
+          "change_belief_purity": 0.14101848252762442,
+          "change_phi_avg": 0.14525139664804473,
+          "change_phi_max": 0.06557377049180331,
+          "feed_algorithm": "belief",
+          "label": "non-rumor"
+        },
+        {
+          "case_name": "nonrumor_justin_bieber_loving_himself",
+          "change_belief_purity": -0.015013370170200295,
+          "change_phi_avg": 0.01835594573024749,
+          "change_phi_max": 0.0,
+          "feed_algorithm": "random",
+          "label": "non-rumor"
+        }
+      ],
+      "calibration_series": [
+        {
+          "observed_phi": 0.058,
+          "predicted_phi": 0.006666666666666666,
+          "residual": -0.051333333333333335,
+          "timestep": 0
+        },
+        {
+          "observed_phi": 0.136,
+          "predicted_phi": 0.009333333333333334,
+          "residual": -0.12666666666666668,
+          "timestep": 1
+        },
+        {
+          "observed_phi": 0.086,
+          "predicted_phi": 0.006666666666666667,
+          "residual": -0.07933333333333333,
+          "timestep": 2
+        },
+        {
+          "observed_phi": 0.105,
+          "predicted_phi": 0.009,
+          "residual": -0.096,
+          "timestep": 3
+        },
+        {
+          "observed_phi": 0.035,
+          "predicted_phi": 0.010333333333333333,
+          "residual": -0.02466666666666667,
+          "timestep": 4
+        },
+        {
+          "observed_phi": 0.058,
+          "predicted_phi": 0.006666666666666666,
+          "residual": -0.051333333333333335,
+          "timestep": 5
+        },
+        {
+          "observed_phi": 0.014,
+          "predicted_phi": 0.009666666666666667,
+          "residual": -0.004333333333333333,
+          "timestep": 6
+        },
+        {
+          "observed_phi": 0.011,
+          "predicted_phi": 0.004333333333333333,
+          "residual": -0.006666666666666666,
+          "timestep": 7
+        },
+        {
+          "observed_phi": 0.011,
+          "predicted_phi": 0.006333333333333333,
+          "residual": -0.004666666666666666,
+          "timestep": 8
+        },
+        {
+          "observed_phi": 0.044,
+          "predicted_phi": 0.006333333333333333,
+          "residual": -0.03766666666666667,
+          "timestep": 9
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.007333333333333333,
+          "residual": 0.007333333333333333,
+          "timestep": 10
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.006,
+          "residual": 0.005,
+          "timestep": 11
+        },
+        {
+          "observed_phi": 0.033,
+          "predicted_phi": 0.007,
+          "residual": -0.026000000000000002,
+          "timestep": 12
+        },
+        {
+          "observed_phi": 0.002,
+          "predicted_phi": 0.007333333333333333,
+          "residual": 0.005333333333333333,
+          "timestep": 13
+        },
+        {
+          "observed_phi": 0.017,
+          "predicted_phi": 0.008666666666666666,
+          "residual": -0.008333333333333335,
+          "timestep": 14
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.005666666666666667,
+          "residual": 0.004666666666666667,
+          "timestep": 15
+        },
+        {
+          "observed_phi": 0.022,
+          "predicted_phi": 0.005666666666666667,
+          "residual": -0.01633333333333333,
+          "timestep": 16
+        },
+        {
+          "observed_phi": 0.013,
+          "predicted_phi": 0.005666666666666667,
+          "residual": -0.007333333333333332,
+          "timestep": 17
+        },
+        {
+          "observed_phi": 0.013,
+          "predicted_phi": 0.005333333333333333,
+          "residual": -0.007666666666666666,
+          "timestep": 18
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.006333333333333333,
+          "residual": 0.005333333333333333,
+          "timestep": 19
+        },
+        {
+          "observed_phi": 0.023,
+          "predicted_phi": 0.006333333333333333,
+          "residual": -0.016666666666666666,
+          "timestep": 20
+        },
+        {
+          "observed_phi": 0.866,
+          "predicted_phi": 0.008333333333333333,
+          "residual": -0.8576666666666667,
+          "timestep": 21
+        },
+        {
+          "observed_phi": 0.147,
+          "predicted_phi": 0.006333333333333333,
+          "residual": -0.14066666666666666,
+          "timestep": 22
+        },
+        {
+          "observed_phi": 0.138,
+          "predicted_phi": 0.006333333333333333,
+          "residual": -0.13166666666666668,
+          "timestep": 23
+        },
+        {
+          "observed_phi": 0.072,
+          "predicted_phi": 0.005333333333333333,
+          "residual": -0.06666666666666667,
+          "timestep": 24
+        },
+        {
+          "observed_phi": 0.055,
+          "predicted_phi": 0.004333333333333333,
+          "residual": -0.050666666666666665,
+          "timestep": 25
+        },
+        {
+          "observed_phi": 0.053,
+          "predicted_phi": 0.008666666666666666,
+          "residual": -0.044333333333333336,
+          "timestep": 26
+        },
+        {
+          "observed_phi": 0.032,
+          "predicted_phi": 0.007333333333333333,
+          "residual": -0.024666666666666667,
+          "timestep": 27
+        },
+        {
+          "observed_phi": 0.047,
+          "predicted_phi": 0.004,
+          "residual": -0.043,
+          "timestep": 28
+        },
+        {
+          "observed_phi": 0.033,
+          "predicted_phi": 0.007666666666666667,
+          "residual": -0.025333333333333333,
+          "timestep": 29
+        },
+        {
+          "observed_phi": 0.03,
+          "predicted_phi": 0.005666666666666666,
+          "residual": -0.024333333333333332,
+          "timestep": 30
+        },
+        {
+          "observed_phi": 0.023,
+          "predicted_phi": 0.007,
+          "residual": -0.016,
+          "timestep": 31
+        },
+        {
+          "observed_phi": 0.014,
+          "predicted_phi": 0.007,
+          "residual": -0.007,
+          "timestep": 32
+        },
+        {
+          "observed_phi": 0.011,
+          "predicted_phi": 0.006,
+          "residual": -0.004999999999999999,
+          "timestep": 33
+        },
+        {
+          "observed_phi": 0.013,
+          "predicted_phi": 0.007666666666666666,
+          "residual": -0.005333333333333333,
+          "timestep": 34
+        },
+        {
+          "observed_phi": 0.006,
+          "predicted_phi": 0.005,
+          "residual": -0.001,
+          "timestep": 35
+        },
+        {
+          "observed_phi": 0.009,
+          "predicted_phi": 0.006333333333333333,
+          "residual": -0.002666666666666666,
+          "timestep": 36
+        },
+        {
+          "observed_phi": 0.018,
+          "predicted_phi": 0.007,
+          "residual": -0.011,
+          "timestep": 37
+        },
+        {
+          "observed_phi": 0.014,
+          "predicted_phi": 0.007333333333333333,
+          "residual": -0.006666666666666667,
+          "timestep": 38
+        },
+        {
+          "observed_phi": 0.011,
+          "predicted_phi": 0.004666666666666667,
+          "residual": -0.006333333333333332,
+          "timestep": 39
         }
       ]
     },
@@ -246,52 +1173,665 @@
         "time_bin_minutes": 60,
         "phi_denominator_n_agents": 1000
       },
+      "calibration": {
+        "phase": "phase4_chronological_calibration_validation",
+        "feed_algorithm": "chronological",
+        "candidate_index": 4,
+        "n_sims": 3,
+        "rmse": 0.0072547877,
+        "nrmse": 0.1612175042,
+        "p_online": 0.10714111,
+        "p_reshare": 0.03669678,
+        "p_reject": 0.01459229,
+        "predicted_phi_avg": 0.0036958333,
+        "predicted_phi_max": 0.0073333333
+      },
       "simulated_feeds": [
         {
+          "belief_purity_avg_mean": 0.7627458057831057,
+          "believe_events_mean": 64.4,
+          "calibration_candidate_index": 4,
+          "case_name": "false_helric_fredou",
+          "deny_events_mean": 59,
           "feed_algorithm": "chronological",
-          "simulation_phase": "phase3_model_fidelity",
-          "phi_avg_mean": 0.0034575,
-          "phi_max_mean": 0.0082,
-          "belief_purity_avg_mean": 0.7503912206,
-          "online_events_mean": 8550.4,
-          "reshare_events_mean": 276.6,
-          "believe_events_mean": 67.4,
-          "deny_events_mean": 52.2
+          "label": "false",
+          "n_sims": 5,
+          "online_events_mean": 8584.2,
+          "p_online": 0.10714111,
+          "p_reject": 0.01459229,
+          "p_reshare": 0.03669678,
+          "phi_avg_mean": 0.003435,
+          "phi_max_mean": 0.0102,
+          "reshare_events_mean": 274.8,
+          "role": "additional_false_case",
+          "story_id": "553960736964476928",
+          "total_story_tweets_mean": 274.8
         },
         {
-          "feed_algorithm": "belief",
-          "simulation_phase": "phase3_model_fidelity",
-          "phi_avg_mean": 0.003775,
-          "phi_max_mean": 0.0104,
-          "belief_purity_avg_mean": 0.8764937723,
-          "online_events_mean": 8578.8,
-          "reshare_events_mean": 302,
-          "believe_events_mean": 79.4,
-          "deny_events_mean": 0
-        },
-        {
+          "belief_purity_avg_mean": 0.7303372038404106,
+          "believe_events_mean": 65.6,
+          "calibration_candidate_index": 4,
+          "case_name": "false_helric_fredou",
+          "deny_events_mean": 53.8,
           "feed_algorithm": "popularity",
-          "simulation_phase": "phase3_model_fidelity",
-          "phi_avg_mean": 0.003665,
-          "phi_max_mean": 0.0092,
-          "belief_purity_avg_mean": 0.7289808193,
-          "online_events_mean": 8513.2,
-          "reshare_events_mean": 293.2,
-          "believe_events_mean": 66,
-          "deny_events_mean": 58.2
+          "label": "false",
+          "n_sims": 5,
+          "online_events_mean": 8657.2,
+          "p_online": 0.10714111,
+          "p_reject": 0.01459229,
+          "p_reshare": 0.03669678,
+          "phi_avg_mean": 0.0034725,
+          "phi_max_mean": 0.008,
+          "reshare_events_mean": 277.8,
+          "role": "additional_false_case",
+          "story_id": "553960736964476928",
+          "total_story_tweets_mean": 277.8
         },
         {
+          "belief_purity_avg_mean": 0.8662651409208002,
+          "believe_events_mean": 85,
+          "calibration_candidate_index": 4,
+          "case_name": "false_helric_fredou",
+          "deny_events_mean": 0,
+          "feed_algorithm": "belief",
+          "label": "false",
+          "n_sims": 5,
+          "online_events_mean": 8551.8,
+          "p_online": 0.10714111,
+          "p_reject": 0.01459229,
+          "p_reshare": 0.03669678,
+          "phi_avg_mean": 0.0038900000000000002,
+          "phi_max_mean": 0.0086,
+          "reshare_events_mean": 311.2,
+          "role": "additional_false_case",
+          "story_id": "553960736964476928",
+          "total_story_tweets_mean": 311.2
+        },
+        {
+          "belief_purity_avg_mean": 0.7297619416746579,
+          "believe_events_mean": 64.8,
+          "calibration_candidate_index": 4,
+          "case_name": "false_helric_fredou",
+          "deny_events_mean": 54.2,
           "feed_algorithm": "random",
-          "simulation_phase": "phase3_model_fidelity",
-          "phi_avg_mean": 0.0035425,
-          "phi_max_mean": 0.0088,
-          "belief_purity_avg_mean": 0.7364887695,
-          "online_events_mean": 8583.8,
-          "reshare_events_mean": 283.4,
-          "believe_events_mean": 65.2,
-          "deny_events_mean": 55.8
+          "label": "false",
+          "n_sims": 5,
+          "online_events_mean": 8557,
+          "p_online": 0.10714111,
+          "p_reject": 0.01459229,
+          "p_reshare": 0.03669678,
+          "phi_avg_mean": 0.003455,
+          "phi_max_mean": 0.009,
+          "reshare_events_mean": 276.4,
+          "role": "additional_false_case",
+          "story_id": "553960736964476928",
+          "total_story_tweets_mean": 276.4
+        }
+      ],
+      "feed_relative_changes": [
+        {
+          "case_name": "false_helric_fredou",
+          "change_belief_purity": 0.0,
+          "change_phi_avg": 0.0,
+          "change_phi_max": 0.0,
+          "feed_algorithm": "chronological",
+          "label": "false"
+        },
+        {
+          "case_name": "false_helric_fredou",
+          "change_belief_purity": -0.04248938728600604,
+          "change_phi_avg": 0.010917030567685523,
+          "change_phi_max": -0.21568627450980396,
+          "feed_algorithm": "popularity",
+          "label": "false"
+        },
+        {
+          "case_name": "false_helric_fredou",
+          "change_belief_purity": 0.13571931088026365,
+          "change_phi_avg": 0.13245997088791853,
+          "change_phi_max": -0.15686274509803927,
+          "feed_algorithm": "belief",
+          "label": "false"
+        },
+        {
+          "case_name": "false_helric_fredou",
+          "change_belief_purity": -0.043243586340777684,
+          "change_phi_avg": 0.005822416302765663,
+          "change_phi_max": -0.11764705882352954,
+          "feed_algorithm": "random",
+          "label": "false"
+        }
+      ],
+      "calibration_series": [
+        {
+          "observed_phi": 0.045,
+          "predicted_phi": 0.004666666666666667,
+          "residual": -0.04033333333333333,
+          "timestep": 0
+        },
+        {
+          "observed_phi": 0.016,
+          "predicted_phi": 0.004666666666666667,
+          "residual": -0.011333333333333334,
+          "timestep": 1
+        },
+        {
+          "observed_phi": 0.003,
+          "predicted_phi": 0.004,
+          "residual": 0.001,
+          "timestep": 2
+        },
+        {
+          "observed_phi": 0.024,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": -0.021333333333333333,
+          "timestep": 3
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0013333333333333333,
+          "residual": 0.00033333333333333327,
+          "timestep": 4
+        },
+        {
+          "observed_phi": 0.002,
+          "predicted_phi": 0.003,
+          "residual": 0.001,
+          "timestep": 5
+        },
+        {
+          "observed_phi": 0.024,
+          "predicted_phi": 0.004666666666666667,
+          "residual": -0.019333333333333334,
+          "timestep": 6
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.002,
+          "residual": 0.002,
+          "timestep": 7
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.004666666666666667,
+          "residual": 0.004666666666666667,
+          "timestep": 8
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.004666666666666667,
+          "residual": 0.003666666666666667,
+          "timestep": 9
+        },
+        {
+          "observed_phi": 0.014,
+          "predicted_phi": 0.004666666666666667,
+          "residual": -0.009333333333333332,
+          "timestep": 10
+        },
+        {
+          "observed_phi": 0.002,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": 0.0013333333333333335,
+          "timestep": 11
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 12
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": 0.0033333333333333335,
+          "timestep": 13
+        },
+        {
+          "observed_phi": 0.002,
+          "predicted_phi": 0.004666666666666667,
+          "residual": 0.002666666666666667,
+          "timestep": 14
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.005666666666666666,
+          "residual": 0.005666666666666666,
+          "timestep": 15
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.004666666666666667,
+          "residual": 0.003666666666666667,
+          "timestep": 16
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0016666666666666666,
+          "timestep": 17
+        },
+        {
+          "observed_phi": 0.004,
+          "predicted_phi": 0.005666666666666667,
+          "residual": 0.001666666666666667,
+          "timestep": 18
+        },
+        {
+          "observed_phi": 0.021,
+          "predicted_phi": 0.004,
+          "residual": -0.017,
+          "timestep": 19
+        },
+        {
+          "observed_phi": 0.015,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": -0.011333333333333332,
+          "timestep": 20
+        },
+        {
+          "observed_phi": 0.004,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": -0.0006666666666666665,
+          "timestep": 21
+        },
+        {
+          "observed_phi": 0.019,
+          "predicted_phi": 0.006,
+          "residual": -0.013,
+          "timestep": 22
+        },
+        {
+          "observed_phi": 0.005,
+          "predicted_phi": 0.007333333333333333,
+          "residual": 0.002333333333333333,
+          "timestep": 23
+        },
+        {
+          "observed_phi": 0.017,
+          "predicted_phi": 0.006,
+          "residual": -0.011000000000000001,
+          "timestep": 24
+        },
+        {
+          "observed_phi": 0.005,
+          "predicted_phi": 0.004,
+          "residual": -0.001,
+          "timestep": 25
+        },
+        {
+          "observed_phi": 0.013,
+          "predicted_phi": 0.006333333333333333,
+          "residual": -0.006666666666666666,
+          "timestep": 26
+        },
+        {
+          "observed_phi": 0.003,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": 0.0003333333333333335,
+          "timestep": 27
+        },
+        {
+          "observed_phi": 0.004,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": -0.0013333333333333335,
+          "timestep": 28
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.004333333333333333,
+          "residual": 0.004333333333333333,
+          "timestep": 29
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0026666666666666666,
+          "timestep": 30
+        },
+        {
+          "observed_phi": 0.012,
+          "predicted_phi": 0.004,
+          "residual": -0.008,
+          "timestep": 31
+        },
+        {
+          "observed_phi": 0.012,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": -0.008333333333333333,
+          "timestep": 32
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.006333333333333333,
+          "residual": 0.006333333333333333,
+          "timestep": 33
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0013333333333333335,
+          "timestep": 34
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 35
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0013333333333333335,
+          "timestep": 36
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.003,
+          "residual": 0.002,
+          "timestep": 37
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.004666666666666667,
+          "residual": 0.003666666666666667,
+          "timestep": 38
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.003,
+          "residual": 0.002,
+          "timestep": 39
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": 0.0023333333333333335,
+          "timestep": 40
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 41
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.005333333333333333,
+          "residual": 0.004333333333333333,
+          "timestep": 42
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.002,
+          "residual": 0.002,
+          "timestep": 43
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.003,
+          "residual": 0.003,
+          "timestep": 44
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.002,
+          "residual": 0.001,
+          "timestep": 45
+        },
+        {
+          "observed_phi": 0.004,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": -0.0003333333333333335,
+          "timestep": 46
+        },
+        {
+          "observed_phi": 0.002,
+          "predicted_phi": 0.005333333333333333,
+          "residual": 0.003333333333333333,
+          "timestep": 47
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0016666666666666666,
+          "timestep": 48
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0026666666666666666,
+          "timestep": 49
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0023333333333333335,
+          "residual": 0.0023333333333333335,
+          "timestep": 50
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0026666666666666666,
+          "timestep": 51
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": 0.0033333333333333335,
+          "timestep": 52
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.005333333333333333,
+          "residual": 0.005333333333333333,
+          "timestep": 53
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0013333333333333333,
+          "residual": 0.00033333333333333327,
+          "timestep": 54
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.002,
+          "residual": 0.002,
+          "timestep": 55
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": 0.0033333333333333335,
+          "timestep": 56
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": 0.0033333333333333335,
+          "timestep": 57
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.005666666666666667,
+          "residual": 0.005666666666666667,
+          "timestep": 58
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.004,
+          "residual": 0.004,
+          "timestep": 59
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0026666666666666666,
+          "timestep": 60
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.0016666666666666668,
+          "residual": 0.0006666666666666668,
+          "timestep": 61
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 62
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.003,
+          "residual": 0.003,
+          "timestep": 63
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.003,
+          "residual": 0.003,
+          "timestep": 64
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.004666666666666667,
+          "residual": 0.004666666666666667,
+          "timestep": 65
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 66
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0026666666666666666,
+          "timestep": 67
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.004333333333333333,
+          "residual": 0.004333333333333333,
+          "timestep": 68
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 69
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 70
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": 0.0033333333333333335,
+          "timestep": 71
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.003,
+          "residual": 0.003,
+          "timestep": 72
+        },
+        {
+          "observed_phi": 0.001,
+          "predicted_phi": 0.005,
+          "residual": 0.004,
+          "timestep": 73
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0036666666666666666,
+          "residual": 0.0036666666666666666,
+          "timestep": 74
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0016666666666666668,
+          "residual": 0.0016666666666666668,
+          "timestep": 75
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0026666666666666666,
+          "residual": 0.0026666666666666666,
+          "timestep": 76
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.0033333333333333335,
+          "residual": 0.0033333333333333335,
+          "timestep": 77
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.003,
+          "residual": 0.003,
+          "timestep": 78
+        },
+        {
+          "observed_phi": 0.0,
+          "predicted_phi": 0.003,
+          "residual": 0.003,
+          "timestep": 79
         }
       ]
     }
-  ]
+  ],
+  "fakenewsnet_audit": [
+    {
+      "article_count": 5323,
+      "avg_tweet_ids_per_article": 112.39883524328387,
+      "label": "fake",
+      "max_tweet_ids_per_article": 2568,
+      "min_tweet_ids_per_article": 0,
+      "source": "gossipcop",
+      "tweet_id_count": 598299
+    },
+    {
+      "article_count": 16817,
+      "avg_tweet_ids_per_article": 52.42474876612951,
+      "label": "real",
+      "max_tweet_ids_per_article": 2082,
+      "min_tweet_ids_per_article": 0,
+      "source": "gossipcop",
+      "tweet_id_count": 881627
+    },
+    {
+      "article_count": 432,
+      "avg_tweet_ids_per_article": 382.75925925925924,
+      "label": "fake",
+      "max_tweet_ids_per_article": 29060,
+      "min_tweet_ids_per_article": 0,
+      "source": "politifact",
+      "tweet_id_count": 165352
+    },
+    {
+      "article_count": 624,
+      "avg_tweet_ids_per_article": 670.1346153846154,
+      "label": "real",
+      "max_tweet_ids_per_article": 27377,
+      "min_tweet_ids_per_article": 0,
+      "source": "politifact",
+      "tweet_id_count": 418164
+    }
+  ],
+  "visual_summary": {
+    "phase5_case_count": 3,
+    "phase5_feed_condition_count": 12,
+    "phase5_simulation_run_count": 60,
+    "fakenewsnet_article_count": 23196,
+    "fakenewsnet_tweet_id_count": 2063442,
+    "max_observed_phi": 0.866,
+    "max_predicted_phi": 0.010333333333333333,
+    "max_abs_relative_change": 0.21568627450980396
+  }
 }

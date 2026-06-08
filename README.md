@@ -6,9 +6,9 @@ algorithmic newsfeed curation on social media.
 This project aims to reproduce the core findings of Gausen, Luk, and Guo's
 study on how feed-ranking objectives affect information spread, misinformation
 diffusion, and belief purity in a Twitter-like social network. The first target
-is a synthetic, reproducible Python ABM. Full calibration and validation against
-historical cascade data will be added only after the baseline model and data
-workflow are documented.
+is a synthetic, reproducible Python ABM. The current calibration path is an
+executable baseline against local ACL2017 cascade targets; broader search,
+figures, and paper-quality validation remain future work.
 
 ## Original Study
 
@@ -70,14 +70,18 @@ replication path is working.
 
 ## Current Status
 
-This repository has Phase 1, Phase 2, and Phase 3 replication scaffolds. Phase
-1 includes local-only ACL2017 case preprocessing and a dependency-light
-synthetic ABM runner. Phase 2 reconstructs observed cascade event tables and
-`Phi` time series from the ACL2017 propagation trees for the paper-relevant
-Twitter15 cases. Phase 3 upgrades the simulated mechanism with explicit
-per-timestep event traces, state counts, scalar belief updates, source-post
-lineage, and popularity feedback. The project does not yet include calibration
-search, plotted figures, or validated replication results.
+This repository has Phase 1 through Phase 4 replication scaffolds. Phase 1
+includes local-only ACL2017 case preprocessing and a dependency-light synthetic
+ABM runner. Phase 2 reconstructs observed cascade event tables and `Phi` time
+series from the ACL2017 propagation trees for the paper-relevant Twitter15
+cases. Phase 3 upgrades the simulated mechanism with explicit per-timestep
+event traces, state counts, scalar belief updates, source-post lineage, and
+popularity feedback. Phase 4 calibrates chronological-feed simulations against
+Phase 2 observed `Phi` targets with a small deterministic probability grid and
+reports RMSE/NRMSE. Phase 5 runs the calibrated four-feed counterfactual
+comparison for the paper case studies and audits FakeNewsNet as parameter
+context. The project does not yet include final paper-style figures or a
+full-dataset robustness study.
 
 Current validation command:
 
@@ -88,6 +92,8 @@ python3 scripts/prepare_acl2017_cases.py --config configs/phase1_acl2017_cases.j
 python3 scripts/run_phase1_mvp.py --config configs/phase1_acl2017_cases.json
 python3 scripts/prepare_observed_cascades.py --config configs/phase2_observed_cascades.json
 python3 scripts/run_phase3_model_fidelity.py --config configs/phase3_model_fidelity.json
+python3 scripts/run_phase4_calibration.py --config configs/phase4_calibration_validation.json
+python3 scripts/run_phase5_counterfactuals.py --config configs/phase5_case_study_counterfactuals.json
 ```
 
 ## Planned Workflow
@@ -98,8 +104,9 @@ python3 scripts/run_phase3_model_fidelity.py --config configs/phase3_model_fidel
 4. Upgrade the ABM toward paper-faithful agent, feed, belief, and popularity
    mechanics.
 5. Fit and validate the chronological baseline with RMSE/NRMSE.
-6. Reproduce the four feed curation comparisons.
-7. Run sensitivity checks and extensions.
+6. Reproduce calibrated four-feed curation comparisons.
+7. Generate paper-style plots and tables.
+8. Run full-dataset robustness checks and extensions.
 
 ## Data
 

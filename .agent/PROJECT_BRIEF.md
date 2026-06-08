@@ -11,8 +11,8 @@ Use this file to give future Codex sessions high-signal project context.
   Gausen, Luk, and Guo's study on algorithmic newsfeed curation, measuring how
   chronological, belief-based, popularity-based, and random feed objectives
   affect information spread, belief purity, and validation fit.
-- Current stage: Phase 3 model-fidelity upgrade with simulated event/state
-  traces, scalar belief updates, source-post lineage, and popularity feedback.
+- Current stage: Phase 5 calibrated four-feed case-study counterfactuals and
+  dashboard visual tracking.
 - Main stakeholders/users: the project owner, future research collaborators,
   reviewers of a public GitHub replication package, and readers of a future
   paper or technical report.
@@ -67,7 +67,11 @@ Use this file to give future Codex sessions high-signal project context.
   scripts/prepare_observed_cascades.py --config
   configs/phase2_observed_cascades.json`, then `python3
   scripts/run_phase3_model_fidelity.py --config
-  configs/phase3_model_fidelity.json`.
+  configs/phase3_model_fidelity.json`, then `python3
+  scripts/run_phase4_calibration.py --config
+  configs/phase4_calibration_validation.json`, then `python3
+  scripts/run_phase5_counterfactuals.py --config
+  configs/phase5_case_study_counterfactuals.json`.
 - Run backend/dashboard/frontend: not applicable in the current preliminary
   phase.
 
@@ -89,10 +93,9 @@ Use this file to give future Codex sessions high-signal project context.
 
 ## Current Priorities
 
-- Compare Phase 3 chronological traces against Phase 2 observed `Phi` outputs
-  before implementing calibration.
+- Generate paper-style figures and method notes from Phase 5 outputs.
 - Replace template placeholder tests once Phase 1 coverage is stable.
 - Decide dependency management before adding plotting, pandas, NetworkX, or
-  calibration search.
+  full calibration search.
 - Keep implementation aligned with the five paper-derived replication design
   criteria.
