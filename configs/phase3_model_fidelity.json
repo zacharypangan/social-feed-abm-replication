@@ -1,0 +1,72 @@
+{
+  "project": {
+    "name": "social-feed-abm-replication",
+    "phase": "phase3_model_fidelity_upgrade"
+  },
+  "seed": 84,
+  "data": {
+    "acl2017_root": "data/rumor_detection_acl2017",
+    "dataset": "twitter15",
+    "output_dir": "outputs/phase3_model_fidelity"
+  },
+  "selected_cases": [
+    {
+      "case_name": "false_tupac_hiding",
+      "story_id": "505369323922522113",
+      "expected_label": "false",
+      "role": "original_false_case",
+      "initial_infected": 0.7,
+      "timesteps": 80,
+      "probabilities": {
+        "p_reshare": 0.03669678,
+        "p_reject": 0.01459229,
+        "p_online": 0.10714111
+      }
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "story_id": "692812029611089920",
+      "expected_label": "non-rumor",
+      "role": "original_non_false_case",
+      "initial_infected": 0.5,
+      "timesteps": 40,
+      "probabilities": {
+        "p_reshare": 0.0770166,
+        "p_reject": 0.06335449,
+        "p_online": 0.06335449
+      }
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "story_id": "553960736964476928",
+      "expected_label": "false",
+      "role": "additional_false_case",
+      "initial_infected": 0.7,
+      "timesteps": 80,
+      "probabilities": {
+        "p_reshare": 0.03669678,
+        "p_reject": 0.01459229,
+        "p_online": 0.10714111
+      }
+    }
+  ],
+  "simulation": {
+    "n_agents": 1000,
+    "avg_followees": 100,
+    "avg_viewed_posts": 40,
+    "n_sims": 5,
+    "feed_algorithms": [
+      "chronological",
+      "belief",
+      "popularity",
+      "random"
+    ]
+  },
+  "model_fidelity": {
+    "belief_acceptance_distance": 0.35,
+    "belief_update_rate": 0.15,
+    "recent_posts_per_followee": 3,
+    "verified_probability": 0.02,
+    "popularity_feedback": true
+  }
+}

@@ -70,12 +70,14 @@ replication path is working.
 
 ## Current Status
 
-This repository has Phase 1 and Phase 2 replication scaffolds. Phase 1 includes
-local-only ACL2017 case preprocessing and a dependency-light synthetic ABM
-runner. Phase 2 reconstructs observed cascade event tables and `Phi` time series
-from the ACL2017 propagation trees for the paper-relevant Twitter15 cases. The
-project does not yet include full calibration search, plotted figures, or
-validated replication results.
+This repository has Phase 1, Phase 2, and Phase 3 replication scaffolds. Phase
+1 includes local-only ACL2017 case preprocessing and a dependency-light
+synthetic ABM runner. Phase 2 reconstructs observed cascade event tables and
+`Phi` time series from the ACL2017 propagation trees for the paper-relevant
+Twitter15 cases. Phase 3 upgrades the simulated mechanism with explicit
+per-timestep event traces, state counts, scalar belief updates, source-post
+lineage, and popularity feedback. The project does not yet include calibration
+search, plotted figures, or validated replication results.
 
 Current validation command:
 
@@ -85,6 +87,7 @@ python3 -m unittest discover
 python3 scripts/prepare_acl2017_cases.py --config configs/phase1_acl2017_cases.json
 python3 scripts/run_phase1_mvp.py --config configs/phase1_acl2017_cases.json
 python3 scripts/prepare_observed_cascades.py --config configs/phase2_observed_cascades.json
+python3 scripts/run_phase3_model_fidelity.py --config configs/phase3_model_fidelity.json
 ```
 
 ## Planned Workflow
@@ -92,7 +95,8 @@ python3 scripts/prepare_observed_cascades.py --config configs/phase2_observed_ca
 1. Curate project docs, data policy, and reproducibility conventions.
 2. Implement a synthetic ABM smoke workflow.
 3. Reconstruct observed cascade event tables and `Phi` time series.
-4. Encode original fixed parameters and calibrated probabilities.
+4. Upgrade the ABM toward paper-faithful agent, feed, belief, and popularity
+   mechanics.
 5. Fit and validate the chronological baseline with RMSE/NRMSE.
 6. Reproduce the four feed curation comparisons.
 7. Run sensitivity checks and extensions.
@@ -150,8 +154,7 @@ Important runs should record:
 - Metrics.
 - Assumptions and deviations from the original study.
 
-Do not add dependencies, upload raw restricted data, or implement code before the
-project setup and data workflow are accepted.
+Do not add dependencies or upload raw restricted data without explicit approval.
 
 ## License And Citation
 

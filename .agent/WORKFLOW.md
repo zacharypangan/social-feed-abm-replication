@@ -19,8 +19,9 @@ Use this as the default operating loop for coding-agent work.
    network/cascade behavior before relying on restricted external data.
 3. Observed cascade reconstruction: convert local ACL2017 propagation trees into
    event tables and observed `Phi` time series.
-4. Original parameter replication: encode the fixed parameters and calibrated
-   probabilities reported in the paper.
+4. Model-fidelity upgrade: make agent states, belief updates, source-post
+   lineage, event traces, and popularity feedback explicit while retaining the
+   synthetic network.
 5. Calibration and validation: fit the chronological-feed baseline to available
    cascade data and report RMSE/NRMSE.
 6. Counterfactual feed comparison: run chronological, belief-based,

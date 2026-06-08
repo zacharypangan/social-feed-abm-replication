@@ -100,6 +100,27 @@ The default binning is hourly: `timestep = floor(delay_minutes / 60)`. The
 default denominator is `n_agents=1000`, matching the paper's ABM population as a
 Phase 2 approximation.
 
+## Phase 3 Simulation Trace Outputs
+
+Phase 3 does not add new raw data requirements. It uses the same local ACL2017
+case IDs for case selection and label checks, then runs a synthetic ABM with
+paper-scale fixed parameters. Generated outputs are written to
+`outputs/phase3_model_fidelity/simulations/` and remain ignored by Git.
+
+Per-run JSON files include:
+
+```text
+phi_by_timestep
+belief_purity_by_timestep
+event_counts_by_timestep
+state_counts_by_timestep
+network_summary
+```
+
+The Phase 3 event trace records simulated `online`, `feed_view`,
+`belief_update`, `reshare`, `reject`, `believe`, and `deny` counts per timestep.
+These are simulated process records, not observed ACL2017 events.
+
 ## Lineage Record Template
 
 Use this template for each real or synthetic dataset:
@@ -130,4 +151,6 @@ Notes:
   simulation outputs.
 - Phase 2 reconstructs observed ACL2017 cascade events and padded `Phi` series
   for future chronological calibration and validation.
+- Phase 3 adds simulated event/state traces and popularity-feedback mechanics
+  while keeping the network synthetic and uncalibrated.
 - External redistribution constraints remain unresolved.

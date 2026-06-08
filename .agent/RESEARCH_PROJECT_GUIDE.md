@@ -67,6 +67,25 @@ Each tree edge becomes an event row. The `ROOT -> source` edge is preserved as a
 - Generated observed outputs live under `outputs/phase2_observed_cascades/` and
   should remain ignored by Git.
 
+## Phase 3 Model-Fidelity Upgrade
+
+Phase 3 keeps the dependency-light synthetic network but makes the simulated
+mechanism more faithful and inspectable:
+
+- Agents retain scalar beliefs and explicit states: `susceptible`, `believe`,
+  `deny`, and `cured`.
+- Viewed feeds can update beliefs toward the viewed-post belief mean.
+- Susceptible agents can move to `believe` or `deny` based on configured belief
+  acceptance distance.
+- Reshares preserve source-post lineage and can increment source retweet counts
+  for popularity-feedback ranking.
+- Each run records per-timestep event counts, state counts, `Phi`, belief
+  purity, and network summary metadata.
+
+Phase 3 is still not calibrated against real follower networks or cascade
+curves. Treat it as the model-fidelity baseline that Phase 4 will fit and
+validate against Phase 2 observed targets.
+
 ## Baseline Parameters To Preserve
 
 - Agents: 1,000.

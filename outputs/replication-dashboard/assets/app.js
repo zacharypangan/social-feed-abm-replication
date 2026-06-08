@@ -117,6 +117,8 @@ function renderCases(cases) {
               <td>${formatNumber(feed.phi_avg_mean, 5)}</td>
               <td>${formatNumber(feed.phi_max_mean, 5)}</td>
               <td>${formatNumber(feed.belief_purity_avg_mean, 3)}</td>
+              <td>${formatNumber(feed.reshare_events_mean ?? 0, 1)}</td>
+              <td>${formatNumber(feed.deny_events_mean ?? 0, 1)}</td>
             </tr>`
         )
         .join("");
@@ -133,12 +135,12 @@ function renderCases(cases) {
           <div class="bar-list">
             ${barRow("Observed Phi max", item.observed.observed_phi_max, maxObservedPhi, "bar")}
             ${barRow("Observed Phi avg", item.observed.observed_phi_avg, maxObservedPhi, "bar")}
-            ${barRow(`MVP top Phi max (${titleize(topFeed.feed_algorithm)})`, topFeed.phi_max_mean, maxSimPhi, "bar sim")}
+            ${barRow(`Simulation top Phi max (${titleize(topFeed.feed_algorithm)})`, topFeed.phi_max_mean, maxSimPhi, "bar sim")}
             ${barRow("Belief-feed purity", beliefPurityFor(item), 1, "bar purity")}
           </div>
           <table class="case-table">
             <thead>
-              <tr><th>Feed</th><th>Phi avg</th><th>Phi max</th><th>Purity</th></tr>
+              <tr><th>Feed</th><th>Phi avg</th><th>Phi max</th><th>Purity</th><th>Reshare</th><th>Deny</th></tr>
             </thead>
             <tbody>${rows}</tbody>
           </table>

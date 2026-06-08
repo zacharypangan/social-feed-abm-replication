@@ -1,13 +1,14 @@
-"""Feed ranking functions for the Phase 1 ABM."""
+"""Feed ranking functions for the Social Feed ABM replication."""
 
 from __future__ import annotations
 
 import random
 from collections.abc import Sequence
 from dataclasses import dataclass
+from typing import Optional
 
 
-@dataclass(frozen=True)
+@dataclass
 class FeedPost:
     """Candidate post available to an agent's feed."""
 
@@ -16,6 +17,9 @@ class FeedPost:
     belief_value: float
     retweet_count: int
     follower_count: int
+    story_id: str = "story"
+    source_author_id: Optional[int] = None
+    is_story: bool = True
 
 
 def rank_feed(
