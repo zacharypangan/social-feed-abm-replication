@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -11,6 +12,8 @@ FIXTURE_DIR = REPO_ROOT / "tests/fixtures/acl2017_twitter15"
 
 from social_feed_abm.acl2017 import parse_tree_line  # noqa: E402
 from social_feed_abm.observed import (  # noqa: E402
+    ObservedCascadeEvent,
+    cascade_snapshot,
     classify_event,
     delay_to_timestep,
     phi_series,
@@ -90,3 +93,41 @@ class ObservedCascadeTests(unittest.TestCase):
 
         self.assertEqual(series[0]["event_count"], 2)
         self.assertEqual(series[0]["phi"], 0.002)
+
+    def test_cascade_snapshot_preserves_source_and_sanitizes_ids(self) -> None:
+        events = [
+            ObservedCascadeEvent(
+                story_id="story",
+                case_name="case",
+                label="false",
+                source_tweet_id="story",
+                parent_user_id="ROOT",
+                parent_tweet_id="ROOT",
+                user_id="raw_user_1",
+                tweet_id="raw_tweet_source",
+                delay_minutes=0.0,
+                timestep=0,
+                event_type="source",
+            ),
+            ObservedCascadeEvent(
+                story_id="story",
+                case_name="case",
+                label="false",
+                source_tweet_id="story",
+                parent_user_id="raw_user_1",
+                parent_tweet_id="raw_tweet_source",
+                user_id="raw_user_2",
+                tweet_id="raw_tweet_child",
+                delay_minutes=65.0,
+                timestep=1,
+                event_type="propagation",
+            ),
+        ]
+
+        snapshot = cascade_snapshot(events)
+
+        self.assertEqual(snapshot["nodes"][0]["event_type"], "source")
+        self.assertEqual(snapshot["nodes"][0]["id"], "cascade_0000")
+        self.assertEqual(snapshot["edges"][0]["source"], "cascade_0000")
+        self.assertEqual(snapshot["edges"][0]["target"], "cascade_0001")
+        self.assertNotIn("raw_tweet_source", json.dumps(snapshot))

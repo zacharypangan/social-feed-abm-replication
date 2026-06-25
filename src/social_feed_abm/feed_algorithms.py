@@ -20,6 +20,7 @@ class FeedPost:
     story_id: str = "story"
     source_author_id: Optional[int] = None
     is_story: bool = True
+    verified_author: bool = False
 
 
 def rank_feed(
@@ -37,7 +38,11 @@ def rank_feed(
     if algorithm == "popularity":
         return sorted(
             posts,
-            key=lambda post: (post.retweet_count + post.follower_count, post.timestamp),
+            key=lambda post: (
+                post.retweet_count,
+                post.follower_count,
+                post.timestamp,
+            ),
             reverse=True,
         )
     if algorithm == "random":

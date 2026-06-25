@@ -11,8 +11,10 @@ Use this file to give future Codex sessions high-signal project context.
   Gausen, Luk, and Guo's study on algorithmic newsfeed curation, measuring how
   chronological, belief-based, popularity-based, and random feed objectives
   affect information spread, belief purity, and validation fit.
-- Current stage: Phase 5 calibrated four-feed case-study counterfactuals and
-  dashboard visual tracking.
+- Current stage: Phase 6 replication-fidelity repair with synthetic
+  Barabasi-Albert network snapshots, observed cascade snapshots, paper
+  probability runs, exact paper intervention targets, and dashboard verdict
+  tracking.
 - Main stakeholders/users: the project owner, future research collaborators,
   reviewers of a public GitHub replication package, and readers of a future
   paper or technical report.
@@ -71,7 +73,9 @@ Use this file to give future Codex sessions high-signal project context.
   scripts/run_phase4_calibration.py --config
   configs/phase4_calibration_validation.json`, then `python3
   scripts/run_phase5_counterfactuals.py --config
-  configs/phase5_case_study_counterfactuals.json`.
+  configs/phase5_case_study_counterfactuals.json`, then `python3
+  scripts/run_phase6_replication_fidelity.py --config
+  configs/phase6_replication_fidelity_repair.json`.
 - Run backend/dashboard/frontend: not applicable in the current preliminary
   phase.
 
@@ -93,7 +97,9 @@ Use this file to give future Codex sessions high-signal project context.
 
 ## Current Priorities
 
-- Generate paper-style figures and method notes from Phase 5 outputs.
+- Generate paper-style figures and method notes from Phase 6 outputs.
+- Repair the simulation mechanism so popularity and belief curation reproduce
+  the paper's intervention directions and approximate magnitudes.
 - Replace template placeholder tests once Phase 1 coverage is stable.
 - Decide dependency management before adding plotting, pandas, NetworkX, or
   full calibration search.

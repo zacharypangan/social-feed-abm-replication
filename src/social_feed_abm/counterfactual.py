@@ -78,6 +78,64 @@ def aggregate_by_algorithm(rows: list[dict[str, Any]]) -> list[dict[str, object]
     return aggregates
 
 
+def replication_verdict_rows(
+    actual_rows: list[dict[str, Any]],
+    target_rows: list[dict[str, Any]],
+    match_tolerance: float = 0.05,
+    directional_tolerance: float = 0.25,
+) -> list[dict[str, object]]:
+    """Compare replication metrics against paper targets when targets exist."""
+
+    actual_index = {
+        (
+            str(row.get("case_name", "")),
+            str(row.get("feed_algorithm", "")),
+            str(row.get("metric", "")),
+        ): row
+        for row in actual_rows
+    }
+    verdicts: list[dict[str, object]] = []
+    for target in target_rows:
+        key = (
+            str(target.get("case_name", "")),
+            str(target.get("feed_algorithm", "")),
+            str(target.get("metric", "")),
+        )
+        actual = actual_index.get(key)
+        target_value = target.get("target_value")
+        if actual is None or target_value is None:
+            verdict = "blocked"
+            actual_value = actual.get("actual_value") if actual else None
+            delta = None
+            relative_delta = None
+        else:
+            actual_value = float(actual["actual_value"])
+            target_float = float(target_value)
+            delta = actual_value - target_float
+            relative_delta = 0.0 if target_float == 0 else delta / abs(target_float)
+            verdict = _verdict_for_delta(
+                actual_value,
+                target_float,
+                match_tolerance,
+                directional_tolerance,
+            )
+        verdicts.append(
+            {
+                "case_name": target.get("case_name"),
+                "feed_algorithm": target.get("feed_algorithm"),
+                "metric": target.get("metric"),
+                "paper_table": target.get("paper_table"),
+                "target_value": target_value,
+                "actual_value": actual_value,
+                "delta": delta,
+                "relative_delta": relative_delta,
+                "verdict": verdict,
+                "note": target.get("note", ""),
+            }
+        )
+    return verdicts
+
+
 def _find_algorithm(
     rows: list[dict[str, Any]],
     algorithm: str,
@@ -86,3 +144,21 @@ def _find_algorithm(
         if row["feed_algorithm"] == algorithm:
             return row
     raise ValueError(f"Missing baseline feed algorithm: {algorithm}")
+
+
+def _verdict_for_delta(
+    actual_value: float,
+    target_value: float,
+    match_tolerance: float,
+    directional_tolerance: float,
+) -> str:
+    if target_value == 0:
+        if abs(actual_value) <= match_tolerance:
+            return "matched"
+        return "diverged"
+    relative_delta = (actual_value - target_value) / abs(target_value)
+    if abs(relative_delta) <= match_tolerance:
+        return "matched"
+    if actual_value * target_value >= 0 and abs(relative_delta) <= directional_tolerance:
+        return "directionally_matched"
+    return "diverged"

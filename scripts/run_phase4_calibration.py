@@ -164,6 +164,7 @@ def main() -> int:
                 "The search is a small deterministic multiplier grid around paper-reported probabilities.",
                 "The synthetic network is still not calibrated to real follower data.",
                 "Best candidates are selected by NRMSE with RMSE as a tie breaker.",
+                "Phase 4 is a partial-fidelity baseline; Phase 6 uses paper-reported probabilities for final repair runs.",
             ],
         },
     )

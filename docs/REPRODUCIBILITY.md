@@ -86,6 +86,22 @@ For Phase 5 case-study counterfactual runs, record:
 - Assumption that full-dataset average propagation analysis is a later
   robustness phase, not the faithful paper replication target.
 
+## Phase 6 Fidelity Repair Records
+
+For Phase 6 replication-fidelity repair runs, record:
+
+- Config path and paper-probability source for each case.
+- Synthetic network model, target average followees, seed, and network summary.
+- Whether probability sampling, sampled `Nposts`, Bayesian-style belief update,
+  background posts, verified influence, and popularity feedback were enabled.
+- Per-feed `Phi_avg`, `Phi_max`, belief purity, event summaries, and relative
+  changes against chronological baseline.
+- Target-verdict rows, including `blocked` rows where exact paper target values
+  have not yet been transcribed.
+- Sanitized synthetic network snapshot path and observed cascade snapshot path.
+- Assumption that the observed ACL2017 propagation tree is not the underlying
+  follower network.
+
 ## Outputs
 
 - Write generated artifacts under `outputs/`.

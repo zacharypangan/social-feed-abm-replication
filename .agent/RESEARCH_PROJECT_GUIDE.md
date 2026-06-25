@@ -123,6 +123,24 @@ the paper states that additional case studies do not enrich case-dependent
 calibration/validation and suggests average propagation patterns as future
 work.
 
+## Phase 6 Replication-Fidelity Repair
+
+Phase 6 repairs known fidelity gaps before paper-style claims:
+
+- Synthetic agent networks use a deterministic Barabasi-Albert directed
+  projection with follower/followee diagnostics and public-safe snapshots.
+- Viewed post counts can be sampled around the paper mean of 40 with std 20.
+- Paper-reported calibrated probabilities are used directly for final
+  case-study runs, while Phase 4 grid results remain diagnostic baselines.
+- Belief updates use a Bayesian-style posterior approximation instead of only a
+  linear mean shift.
+- Background non-story posts and verified-user influence are explicit
+  configurable mechanisms.
+- Observed ACL2017 cascade snapshots are visualized separately from the
+  synthetic social network.
+- Paper target values that are not yet transcribed are represented as blocked
+  verdicts rather than guessed numeric targets.
+
 ## Baseline Parameters To Preserve
 
 - Agents: 1,000.
@@ -135,6 +153,9 @@ work.
   `p_reject=0.01459229`, `p_online=0.10714111`.
 - Calibrated non-false-story probabilities: `p_reshare=0.0770166`,
   `p_reject=0.06335449`, `p_online=0.06335449`.
+- Additional Helric Fredou false-story probabilities used in Phase 6:
+  `p_reshare=0.02094727`, `p_reject=0.00696533`,
+  `p_online=0.10001950`.
 
 Record any deviation from these values in configs, experiment notes, and result
 summaries.

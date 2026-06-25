@@ -45,9 +45,20 @@ class SimulationParams:
     seed: int
     belief_acceptance_distance: float = 0.35
     belief_update_rate: float = 0.15
+    belief_update_mode: str = "linear"
     recent_posts_per_followee: int = 3
     verified_probability: float = 0.0
+    verified_influence_multiplier: float = 1.0
     popularity_feedback: bool = True
+    network_model: str = "barabasi_albert"
+    avg_viewed_posts_std: float = 0.0
+    probability_sampling: bool = False
+    probability_std_fraction: float = 0.0
+    background_posts_per_agent: int = 0
+    background_post_probability: float = 0.0
+    include_network_snapshot: bool = False
+    network_snapshot_max_nodes: int = 150
+    network_snapshot_max_edges: int = 350
 
 
 def run_simulation(params: SimulationParams, feed_algorithm: str) -> dict[str, object]:
@@ -55,6 +66,7 @@ def run_simulation(params: SimulationParams, feed_algorithm: str) -> dict[str, o
 
     rng = random.Random(params.seed)
     agents = _make_agents(params, rng)
+    _seed_background_posts(agents, params.background_posts_per_agent, rng)
     _seed_initial_believers(agents, params.initial_infected, rng)
 
     phi_by_timestep: list[float] = []
@@ -77,35 +89,49 @@ def run_simulation(params: SimulationParams, feed_algorithm: str) -> dict[str, o
         }
 
         for agent in agents:
-            if rng.random() >= params.p_online:
+            p_online = _sample_probability(params.p_online, params, rng)
+            if rng.random() >= p_online:
                 continue
 
             event_counts["online"] += 1
             feed = _candidate_feed(agent, agents, params.recent_posts_per_followee)
             ranked = rank_feed(feed_algorithm, feed, agent.belief, rng)
-            viewed = ranked[: params.avg_viewed_posts]
+            viewed_count = _sample_viewed_post_count(params, rng)
+            viewed = ranked[:viewed_count]
             if viewed:
                 event_counts["feed_view"] += 1
                 timestep_purities.append(
                     belief_purity(agent.belief, [post.belief_value for post in viewed])
                 )
-                if _update_belief(agent, viewed, params.belief_update_rate):
+                if _update_belief(
+                    agent,
+                    viewed,
+                    params.belief_update_rate,
+                    params.belief_update_mode,
+                ):
                     event_counts["belief_update"] += 1
 
-            if agent.state == "believe" and rng.random() < params.p_reject:
+            p_reject = _sample_probability(params.p_reject, params, rng)
+            p_reshare = _sample_probability(params.p_reshare, params, rng)
+            p_reshare *= _verified_multiplier(viewed, params.verified_influence_multiplier)
+            p_reshare = _clip_probability(p_reshare)
+
+            if agent.state == "believe" and rng.random() < p_reject:
                 agent.state = "cured"
                 event_counts["reject"] += 1
+                _maybe_add_background_post(agent, timestep, params, rng)
                 continue
 
-            if agent.state == "believe" and rng.random() < params.p_reshare:
+            if agent.state == "believe" and rng.random() < p_reshare:
                 _add_story_post(agent, timestep, viewed, rng, params.popularity_feedback)
                 timestep_story_tweets += 1
                 event_counts["reshare"] += 1
+                _maybe_add_background_post(agent, timestep, params, rng)
                 continue
 
             if agent.state == "susceptible" and viewed:
                 accepted = _accepts_story(agent, viewed, params.belief_acceptance_distance)
-                if accepted and rng.random() < params.p_reshare:
+                if accepted and rng.random() < p_reshare:
                     agent.state = "believe"
                     _add_story_post(agent, timestep, viewed, rng, params.popularity_feedback)
                     event_counts["believe"] += 1
@@ -115,9 +141,10 @@ def run_simulation(params: SimulationParams, feed_algorithm: str) -> dict[str, o
                     agent.state = "deny"
                     event_counts["deny"] += 1
 
-            if agent.state == "deny" and viewed and rng.random() < params.p_reject:
+            if agent.state == "deny" and viewed and rng.random() < p_reject:
                 agent.state = "cured"
                 event_counts["reject"] += 1
+            _maybe_add_background_post(agent, timestep, params, rng)
 
         total_story_tweets += timestep_story_tweets
         phi_by_timestep.append(phi(timestep_story_tweets, params.n_agents))
@@ -125,7 +152,7 @@ def run_simulation(params: SimulationParams, feed_algorithm: str) -> dict[str, o
         event_counts_by_timestep.append(event_counts)
         state_counts_by_timestep.append(_state_counts(agents))
 
-    return {
+    result = {
         "feed_algorithm": feed_algorithm,
         "timesteps": params.timesteps,
         "phi_by_timestep": phi_by_timestep,
@@ -138,6 +165,13 @@ def run_simulation(params: SimulationParams, feed_algorithm: str) -> dict[str, o
         "belief_purity_avg": mean(purity_by_timestep) if purity_by_timestep else 0.0,
         "total_story_tweets": total_story_tweets,
     }
+    if params.include_network_snapshot:
+        result["network_snapshot"] = network_snapshot(
+            agents,
+            params.network_snapshot_max_nodes,
+            params.network_snapshot_max_edges,
+        )
+    return result
 
 
 def summarize_runs(runs: Iterable[dict[str, object]]) -> dict[str, float]:
@@ -176,27 +210,63 @@ def _make_agents(params: SimulationParams, rng: random.Random) -> list[Agent]:
     for agent in agents:
         agent.verified = rng.random() < params.verified_probability
 
-    target_followees = min(params.avg_followees, params.n_agents - 1)
-    attachment_repeats = [0]
-
-    for agent_id in range(1, params.n_agents):
-        existing = list(range(agent_id))
-        selected: set[int] = set()
-        while len(selected) < min(target_followees, len(existing)):
-            selected.add(rng.choice(attachment_repeats))
-        agents[agent_id].followees.update(selected)
-        for followee_id in selected:
-            agents[followee_id].followers.add(agent_id)
-        attachment_repeats.extend([agent_id] + list(selected))
-
-    for agent in agents:
-        while len(agent.followees) < target_followees:
-            candidate = rng.randrange(params.n_agents)
-            if candidate != agent.agent_id:
-                agent.followees.add(candidate)
-                agents[candidate].followers.add(agent.agent_id)
+    if params.network_model != "barabasi_albert":
+        raise ValueError(f"Unknown network model: {params.network_model}")
+    _wire_barabasi_albert(agents, params.avg_followees, rng)
 
     return agents
+
+
+def _wire_barabasi_albert(
+    agents: list[Agent],
+    target_avg_followees: int,
+    rng: random.Random,
+) -> None:
+    """Create a directed follower/followee projection from a BA graph.
+
+    The original paper describes a Barabasi-Albert social network. This
+    implementation builds an undirected preferential-attachment backbone and
+    projects each edge in both directions so feed visibility remains explicit.
+    """
+
+    n_agents = len(agents)
+    if n_agents <= 1:
+        return
+    m = max(1, min(n_agents - 1, round(target_avg_followees / 2)))
+    initial_size = min(n_agents, max(2, m + 1))
+
+    repeated: list[int] = []
+    for source_id in range(initial_size):
+        for target_id in range(source_id + 1, initial_size):
+            _add_mutual_connection(agents, source_id, target_id)
+
+    for agent in agents[:initial_size]:
+        repeated.extend([agent.agent_id] * len(agent.followees))
+    if not repeated:
+        repeated = list(range(initial_size))
+
+    for agent_id in range(initial_size, n_agents):
+        targets: set[int] = set()
+        target_count = min(m, agent_id)
+        while len(targets) < target_count:
+            targets.add(rng.choice(repeated))
+        for target_id in targets:
+            _add_mutual_connection(agents, agent_id, target_id)
+        repeated.extend(targets)
+        repeated.extend([agent_id] * len(targets))
+
+
+def _add_mutual_connection(
+    agents: list[Agent],
+    source_id: int,
+    target_id: int,
+) -> None:
+    if source_id == target_id:
+        return
+    agents[source_id].followees.add(target_id)
+    agents[source_id].followers.add(target_id)
+    agents[target_id].followees.add(source_id)
+    agents[target_id].followers.add(source_id)
 
 
 def _seed_initial_believers(
@@ -208,6 +278,18 @@ def _seed_initial_believers(
     for agent in rng.sample(agents, infected_count):
         agent.state = "believe"
         _add_story_post(agent, timestamp=0)
+
+
+def _seed_background_posts(
+    agents: list[Agent],
+    posts_per_agent: int,
+    rng: random.Random,
+) -> None:
+    if posts_per_agent <= 0:
+        return
+    for agent in agents:
+        for _ in range(posts_per_agent):
+            _add_background_post(agent, -rng.randrange(1, 20), rng)
 
 
 def _candidate_feed(
@@ -242,8 +324,40 @@ def _add_story_post(
         story_id=source_post.story_id if source_post else "story",
         source_author_id=source_post.author_id if source_post else agent.agent_id,
         is_story=True,
+        verified_author=agent.verified,
     )
     agent.posts.append(post)
+
+
+def _add_background_post(
+    agent: Agent,
+    timestamp: int,
+    rng: random.Random,
+) -> None:
+    post = FeedPost(
+        author_id=agent.agent_id,
+        timestamp=timestamp,
+        belief_value=min(1.0, max(0.0, rng.gauss(agent.belief, 0.12))),
+        retweet_count=rng.randrange(0, 4),
+        follower_count=len(agent.followers),
+        story_id="background",
+        source_author_id=agent.agent_id,
+        is_story=False,
+        verified_author=agent.verified,
+    )
+    agent.posts.append(post)
+
+
+def _maybe_add_background_post(
+    agent: Agent,
+    timestep: int,
+    params: SimulationParams,
+    rng: random.Random,
+) -> None:
+    if params.background_post_probability <= 0:
+        return
+    if rng.random() < params.background_post_probability:
+        _add_background_post(agent, timestep, rng)
 
 
 def _choose_source_post(
@@ -263,14 +377,33 @@ def _update_belief(
     agent: Agent,
     viewed_posts: list[FeedPost],
     belief_update_rate: float,
+    belief_update_mode: str = "linear",
 ) -> bool:
     if belief_update_rate <= 0:
         return False
     viewed_mean = mean(post.belief_value for post in viewed_posts)
     previous = agent.belief
-    agent.belief += belief_update_rate * (viewed_mean - agent.belief)
+    if belief_update_mode == "linear":
+        target = viewed_mean
+    elif belief_update_mode == "bayesian":
+        target = _bayesian_posterior(agent.belief, viewed_mean)
+    else:
+        raise ValueError(f"Unknown belief update mode: {belief_update_mode}")
+    agent.belief += belief_update_rate * (target - agent.belief)
     agent.belief = min(1.0, max(0.0, agent.belief))
     return abs(agent.belief - previous) > 1e-12
+
+
+def _bayesian_posterior(prior: float, evidence: float) -> float:
+    prior = min(0.999, max(0.001, prior))
+    evidence = min(0.999, max(0.001, evidence))
+    likelihood_true = 0.05 + (0.95 * evidence)
+    likelihood_false = 0.05 + (0.95 * (1.0 - evidence))
+    numerator = prior * likelihood_true
+    denominator = numerator + ((1.0 - prior) * likelihood_false)
+    if denominator == 0:
+        return prior
+    return numerator / denominator
 
 
 def _accepts_story(
@@ -301,13 +434,133 @@ def _network_summary(agents: list[Agent]) -> dict[str, float]:
             "max_followers": 0.0,
             "verified_count": 0.0,
         }
+    followee_counts = [len(agent.followees) for agent in agents]
+    follower_counts = [len(agent.followers) for agent in agents]
     return {
         "n_agents": float(len(agents)),
-        "avg_followees": mean(len(agent.followees) for agent in agents),
-        "avg_followers": mean(len(agent.followers) for agent in agents),
-        "max_followers": float(max(len(agent.followers) for agent in agents)),
+        "edge_count": float(sum(followee_counts)),
+        "avg_followees": mean(followee_counts),
+        "avg_followers": mean(follower_counts),
+        "max_followers": float(max(follower_counts)),
+        "min_followers": float(min(follower_counts)),
         "verified_count": float(sum(1 for agent in agents if agent.verified)),
     }
+
+
+def network_snapshot(
+    agents: list[Agent],
+    max_nodes: int = 150,
+    max_edges: int = 350,
+) -> dict[str, object]:
+    """Build a public-safe diagnostic snapshot of the synthetic agent network."""
+
+    if max_nodes <= 0:
+        raise ValueError("max_nodes must be positive")
+    if max_edges <= 0:
+        raise ValueError("max_edges must be positive")
+    ranked = sorted(
+        agents,
+        key=lambda agent: (
+            len(agent.followers),
+            agent.story_tweet_count,
+            agent.verified,
+            -agent.agent_id,
+        ),
+        reverse=True,
+    )
+    selected = sorted(agent.agent_id for agent in ranked[:max_nodes])
+    selected_set = set(selected)
+    nodes = [
+        {
+            "id": _agent_public_id(agent_id),
+            "agent_id": _agent_public_id(agent_id),
+            "state": agents[agent_id].state,
+            "belief_bucket": _belief_bucket(agents[agent_id].belief),
+            "verified": agents[agent_id].verified,
+            "followers": len(agents[agent_id].followers),
+            "followees": len(agents[agent_id].followees),
+            "story_tweet_count": agents[agent_id].story_tweet_count,
+        }
+        for agent_id in selected
+    ]
+    edges: list[dict[str, object]] = []
+    seen: set[tuple[int, int]] = set()
+    for source_id in selected:
+        for target_id in sorted(agents[source_id].followees):
+            if target_id not in selected_set:
+                continue
+            signature = (source_id, target_id)
+            if signature in seen:
+                continue
+            seen.add(signature)
+            edges.append(
+                {
+                    "source": _agent_public_id(source_id),
+                    "target": _agent_public_id(target_id),
+                }
+            )
+            if len(edges) >= max_edges:
+                break
+        if len(edges) >= max_edges:
+            break
+    return {
+        "type": "synthetic_agent_network",
+        "model": "barabasi_albert_directed_projection",
+        "summary": _network_summary(agents),
+        "sample": {
+            "node_count": len(nodes),
+            "edge_count": len(edges),
+            "max_nodes": max_nodes,
+            "max_edges": max_edges,
+        },
+        "nodes": nodes,
+        "edges": edges,
+    }
+
+
+def _sample_viewed_post_count(params: SimulationParams, rng: random.Random) -> int:
+    if params.avg_viewed_posts_std <= 0:
+        return max(0, params.avg_viewed_posts)
+    sampled = round(rng.gauss(params.avg_viewed_posts, params.avg_viewed_posts_std))
+    return max(1, min(max(1, params.avg_viewed_posts * 3), sampled))
+
+
+def _sample_probability(
+    probability: float,
+    params: SimulationParams,
+    rng: random.Random,
+) -> float:
+    if not params.probability_sampling or params.probability_std_fraction <= 0:
+        return _clip_probability(probability)
+    std = max(0.0, probability * params.probability_std_fraction)
+    return _clip_probability(rng.gauss(probability, std))
+
+
+def _verified_multiplier(
+    viewed_posts: list[FeedPost],
+    multiplier: float,
+) -> float:
+    if multiplier <= 1.0:
+        return 1.0
+    if any(post.is_story and post.verified_author for post in viewed_posts):
+        return multiplier
+    return 1.0
+
+
+def _clip_probability(value: float) -> float:
+    return min(1.0, max(0.0, value))
+
+
+def _agent_public_id(agent_id: int) -> str:
+    return f"agent_{agent_id:04d}"
+
+
+def _belief_bucket(value: float) -> str:
+    if value < 0.33:
+        return "low"
+    if value < 0.67:
+        return "medium"
+    return "high"
 
 
 def _mean_event_total(

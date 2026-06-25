@@ -9,7 +9,16 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from social_feed_abm.feed_algorithms import FeedPost  # noqa: E402
-from social_feed_abm.simulation import SimulationParams, run_simulation, summarize_runs  # noqa: E402
+from social_feed_abm.simulation import (  # noqa: E402
+    SimulationParams,
+    _bayesian_posterior,
+    _make_agents,
+    _sample_probability,
+    _sample_viewed_post_count,
+    network_snapshot,
+    run_simulation,
+    summarize_runs,
+)
 
 
 class SimulationTests(unittest.TestCase):
@@ -83,6 +92,109 @@ class SimulationTests(unittest.TestCase):
 
         self.assertEqual(post.retweet_count, 3)
         self.assertEqual(post.story_id, "example")
+
+    def test_barabasi_albert_network_is_deterministic_and_consistent(self) -> None:
+        import random
+
+        params = SimulationParams(
+            n_agents=80,
+            avg_followees=12,
+            avg_viewed_posts=4,
+            timesteps=2,
+            initial_infected=0.2,
+            p_online=0.5,
+            p_reshare=0.2,
+            p_reject=0.1,
+            seed=11,
+        )
+
+        first = _make_agents(params, random.Random(params.seed))
+        second = _make_agents(params, random.Random(params.seed))
+        first_edges = {
+            (agent.agent_id, followee_id)
+            for agent in first
+            for followee_id in agent.followees
+        }
+        second_edges = {
+            (agent.agent_id, followee_id)
+            for agent in second
+            for followee_id in agent.followees
+        }
+
+        self.assertEqual(first_edges, second_edges)
+        self.assertFalse(any(source == target for source, target in first_edges))
+        for source, target in first_edges:
+            self.assertIn(source, first[target].followers)
+        avg_followees = sum(len(agent.followees) for agent in first) / len(first)
+        self.assertGreater(avg_followees, 8)
+        self.assertGreater(
+            max(len(agent.followers) for agent in first),
+            avg_followees,
+        )
+
+    def test_network_snapshot_caps_and_sanitizes(self) -> None:
+        import random
+
+        params = SimulationParams(
+            n_agents=40,
+            avg_followees=8,
+            avg_viewed_posts=4,
+            timesteps=2,
+            initial_infected=0.2,
+            p_online=0.5,
+            p_reshare=0.2,
+            p_reject=0.1,
+            seed=17,
+        )
+        agents = _make_agents(params, random.Random(params.seed))
+
+        snapshot = network_snapshot(agents, max_nodes=10, max_edges=12)
+
+        self.assertEqual(snapshot["sample"]["node_count"], 10)
+        self.assertLessEqual(snapshot["sample"]["edge_count"], 12)
+        self.assertTrue(snapshot["nodes"][0]["id"].startswith("agent_"))
+
+    def test_sampled_nposts_can_be_fixed_or_stochastic(self) -> None:
+        import random
+
+        fixed = SimulationParams(
+            n_agents=10,
+            avg_followees=3,
+            avg_viewed_posts=4,
+            timesteps=1,
+            initial_infected=0.2,
+            p_online=0.5,
+            p_reshare=0.2,
+            p_reject=0.1,
+            seed=1,
+        )
+        sampled = SimulationParams(**{**fixed.__dict__, "avg_viewed_posts_std": 2})
+
+        self.assertEqual(_sample_viewed_post_count(fixed, random.Random(1)), 4)
+        self.assertGreaterEqual(_sample_viewed_post_count(sampled, random.Random(1)), 1)
+
+    def test_probability_sampling_can_be_disabled(self) -> None:
+        import random
+
+        params = SimulationParams(
+            n_agents=10,
+            avg_followees=3,
+            avg_viewed_posts=4,
+            timesteps=1,
+            initial_infected=0.2,
+            p_online=0.5,
+            p_reshare=0.2,
+            p_reject=0.1,
+            seed=1,
+            probability_sampling=False,
+            probability_std_fraction=0.5,
+        )
+
+        self.assertEqual(_sample_probability(0.25, params, random.Random(1)), 0.25)
+
+    def test_bayesian_update_moves_toward_evidence(self) -> None:
+        self.assertGreater(_bayesian_posterior(0.4, 0.8), 0.4)
+        self.assertLess(_bayesian_posterior(0.6, 0.2), 0.6)
 
 
 if __name__ == "__main__":

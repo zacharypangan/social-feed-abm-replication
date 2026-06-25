@@ -70,7 +70,7 @@ replication path is working.
 
 ## Current Status
 
-This repository has Phase 1 through Phase 4 replication scaffolds. Phase 1
+This repository has Phase 1 through Phase 6 replication scaffolds. Phase 1
 includes local-only ACL2017 case preprocessing and a dependency-light synthetic
 ABM runner. Phase 2 reconstructs observed cascade event tables and `Phi` time
 series from the ACL2017 propagation trees for the paper-relevant Twitter15
@@ -80,8 +80,12 @@ popularity feedback. Phase 4 calibrates chronological-feed simulations against
 Phase 2 observed `Phi` targets with a small deterministic probability grid and
 reports RMSE/NRMSE. Phase 5 runs the calibrated four-feed counterfactual
 comparison for the paper case studies and audits FakeNewsNet as parameter
-context. The project does not yet include final paper-style figures or a
-full-dataset robustness study.
+context. Phase 6 adds a replication-fidelity repair pass with a deterministic
+Barabasi-Albert synthetic agent network, sampled viewed-post counts,
+Bayesian-style belief updates, background posts, paper-probability runs,
+target-verdict tracking, and dashboard network/cascade visualizations. Exact
+paper table target transcription and a full-dataset robustness study remain
+future work.
 
 Current validation command:
 
@@ -94,6 +98,7 @@ python3 scripts/prepare_observed_cascades.py --config configs/phase2_observed_ca
 python3 scripts/run_phase3_model_fidelity.py --config configs/phase3_model_fidelity.json
 python3 scripts/run_phase4_calibration.py --config configs/phase4_calibration_validation.json
 python3 scripts/run_phase5_counterfactuals.py --config configs/phase5_case_study_counterfactuals.json
+python3 scripts/run_phase6_replication_fidelity.py --config configs/phase6_replication_fidelity_repair.json
 ```
 
 ## Planned Workflow
@@ -105,8 +110,10 @@ python3 scripts/run_phase5_counterfactuals.py --config configs/phase5_case_study
    mechanics.
 5. Fit and validate the chronological baseline with RMSE/NRMSE.
 6. Reproduce calibrated four-feed curation comparisons.
-7. Generate paper-style plots and tables.
-8. Run full-dataset robustness checks and extensions.
+7. Repair fidelity gaps in the synthetic agent network, belief update,
+   background feed content, verified-user influence, and target verdicts.
+8. Generate paper-style plots and tables.
+9. Run full-dataset robustness checks and extensions.
 
 ## Data
 

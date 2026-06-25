@@ -16,9 +16,196 @@
     </header>
 
     <main>
-      <section class="summary-grid" id="summary-grid" aria-label="Replication summary"></section>
+      <nav class="tab-list" aria-label="Dashboard tabs" role="tablist">
+        <button
+          class="tab-button active"
+          id="tab-concepts"
+          type="button"
+          role="tab"
+          aria-controls="concepts-panel"
+          aria-selected="true"
+          data-tab-target="concepts-panel"
+        >
+          Concepts
+        </button>
+        <button
+          class="tab-button"
+          id="tab-proposal"
+          type="button"
+          role="tab"
+          aria-controls="proposal-panel"
+          aria-selected="false"
+          data-tab-target="proposal-panel"
+        >
+          Research Proposal
+        </button>
+        <button
+          class="tab-button"
+          id="tab-status"
+          type="button"
+          role="tab"
+          aria-controls="status-panel"
+          aria-selected="false"
+          data-tab-target="status-panel"
+        >
+          Replication Status
+        </button>
+      </nav>
 
-      <section class="band">
+      <section
+        class="tab-panel active"
+        id="concepts-panel"
+        role="tabpanel"
+        aria-labelledby="tab-concepts"
+      >
+        <section class="band concept-hero">
+          <div>
+            <p class="eyebrow">Conceptual map</p>
+            <h2>How The Paper Connects Social Networks, Feeds, And Diffusion</h2>
+            <p class="concept-lede">
+              The study frames algorithmic curation as a mechanism inside a
+              Twitter-like agent-based model: agents sit on a social network,
+              receive ranked feed items, update beliefs, and generate diffusion
+              traces that can be compared across feed objectives.
+            </p>
+          </div>
+          <div class="concept-map" id="concept-map-visual"></div>
+        </section>
+
+        <section class="band">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Core concepts</p>
+              <h2>Terms The Dashboard Uses</h2>
+            </div>
+          </div>
+          <div class="concept-grid" id="concept-card-grid"></div>
+        </section>
+
+        <section class="band two-col concept-visual-row">
+          <div>
+            <div class="section-head compact">
+              <div>
+                <p class="eyebrow">ABM workflow</p>
+                <h2>One Simulation Tick</h2>
+              </div>
+            </div>
+            <div class="concept-visual-card" id="abm-loop-visual"></div>
+          </div>
+          <div>
+            <div class="section-head compact">
+              <div>
+                <p class="eyebrow">Feed objectives</p>
+                <h2>What The Interventions Change</h2>
+              </div>
+            </div>
+            <div class="feed-objective-list" id="feed-objective-list"></div>
+          </div>
+        </section>
+
+        <section class="band">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Paper logic</p>
+              <h2>How The Study Tried To Answer Its Research Questions</h2>
+            </div>
+          </div>
+          <div class="rq-grid" id="paper-rq-list"></div>
+        </section>
+      </section>
+
+      <section
+        class="tab-panel"
+        id="proposal-panel"
+        role="tabpanel"
+        aria-labelledby="tab-proposal"
+        hidden
+      >
+        <section class="band proposal-hero">
+          <div>
+            <p class="eyebrow">Research proposal</p>
+            <h2>Exposure-Aware Semantic Network Simulation</h2>
+            <p class="proposal-lede">
+              A benchmark and validation framework for social media diffusion
+              research when language, network structure, feed exposure, and
+              intervention effects are only partially observable.
+            </p>
+            <div class="proposal-question">
+              <span>Main RQ</span>
+              <strong>
+                How can diffusion be modeled, simulated, and evaluated under
+                platform data scarcity?
+              </strong>
+            </div>
+          </div>
+          <div class="proposal-map" id="proposal-map-visual"></div>
+        </section>
+
+        <section class="band">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Framework layers</p>
+              <h2>What The Proposal Integrates</h2>
+            </div>
+          </div>
+          <div class="proposal-layer-grid" id="proposal-layer-grid"></div>
+        </section>
+
+        <section class="band">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Research questions</p>
+              <h2>Questions The Framework Answers</h2>
+            </div>
+          </div>
+          <div class="proposal-rq-grid" id="proposal-rq-grid"></div>
+        </section>
+
+        <section class="band two-col">
+          <div>
+            <div class="section-head compact">
+              <div>
+                <p class="eyebrow">Methodology</p>
+                <h2>Work Packages</h2>
+              </div>
+            </div>
+            <div class="proposal-work-list" id="proposal-work-list"></div>
+          </div>
+          <div>
+            <div class="section-head compact">
+              <div>
+                <p class="eyebrow">Prototype</p>
+                <h2>Minimum Build Scope</h2>
+              </div>
+            </div>
+            <div class="proposal-prototype-card">
+              <div id="proposal-prototype-visual"></div>
+              <div class="prototype-list" id="proposal-prototype-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="band">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Contribution map</p>
+              <h2>What The Research Contributes</h2>
+            </div>
+          </div>
+          <div class="proposal-contribution-grid" id="proposal-contribution-grid"></div>
+        </section>
+      </section>
+
+      <section
+        class="tab-panel"
+        id="status-panel"
+        role="tabpanel"
+        aria-labelledby="tab-status"
+        hidden
+      >
+        <section class="summary-grid" id="summary-grid" aria-label="Replication summary"></section>
+
+        <section class="band">
         <div class="section-head">
           <div>
             <p class="eyebrow">Phase status</p>
@@ -69,6 +256,46 @@
         <div class="chart-grid" id="phi-chart-grid"></div>
       </section>
 
+      <section class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Curation interventions</p>
+            <h2>Actual Vs Paper Feed Effects</h2>
+          </div>
+        </div>
+        <div class="intervention-grid" id="curation-intervention-grid"></div>
+      </section>
+
+      <section class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Network provenance</p>
+            <h2>Synthetic Agent Network</h2>
+          </div>
+        </div>
+        <div class="network-grid" id="agent-network-grid"></div>
+      </section>
+
+      <section class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Cascade provenance</p>
+            <h2>Observed Propagation Cascades</h2>
+          </div>
+        </div>
+        <div class="network-grid" id="cascade-grid"></div>
+      </section>
+
+      <section class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Fidelity repair</p>
+            <h2>Phase 6 Target Verdicts</h2>
+          </div>
+        </div>
+        <div class="verdict-grid" id="phase6-verdict-grid"></div>
+      </section>
+
       <section class="band two-col">
         <div>
           <div class="section-head compact">
@@ -88,6 +315,7 @@
           </div>
           <div class="audit-list" id="fakenewsnet-audit-list"></div>
         </div>
+      </section>
       </section>
     </main>
 

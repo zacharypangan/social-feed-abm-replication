@@ -152,6 +152,25 @@ Generated outputs are written to
 FakeNewsNet is summarized only as a parameter-context audit using article-level
 tweet-ID counts; it is not treated as a propagation-cascade validation target.
 
+## Phase 6 Fidelity Repair Outputs
+
+Phase 6 runs paper-probability case-study simulations with a repaired synthetic
+network and writes generated outputs to
+`outputs/phase6_replication_fidelity_repair/`, which remains ignored by Git.
+
+Phase 6 snapshot outputs include:
+
+```text
+network_snapshot.json   # sanitized synthetic ABM agent-network sample
+cascade_snapshot.json   # sanitized observed ACL2017 propagation-tree sample
+replication_verdicts.*  # paper-target comparison rows
+```
+
+The synthetic agent network is not the observed follower network. It is a
+Barabasi-Albert directed projection used by the ABM. The observed cascade
+snapshot is a propagation tree reconstructed from ACL2017 event records. Do not
+merge or interpret these as the same network.
+
 ## Lineage Record Template
 
 Use this template for each real or synthetic dataset:
@@ -188,4 +207,6 @@ Notes:
   using RMSE/NRMSE; the search is intentionally small and dependency-light.
 - Phase 5 runs calibrated paper-style counterfactual comparisons and audits
   FakeNewsNet tweet-ID volume as context.
+- Phase 6 repairs network/model-fidelity gaps and exports sanitized synthetic
+  network and observed cascade snapshots for the public dashboard.
 - External redistribution constraints remain unresolved.

@@ -127,6 +127,112 @@ def summarize_observed_case(
     }
 
 
+def cascade_snapshot(
+    events: list[ObservedCascadeEvent],
+    max_nodes: int = 250,
+) -> dict[str, object]:
+    """Build a sanitized connected snapshot of an observed propagation cascade."""
+
+    if max_nodes <= 0:
+        raise ValueError("max_nodes must be positive")
+    if not events:
+        return {
+            "type": "observed_acl2017_cascade",
+            "case_name": "",
+            "story_id": "",
+            "nodes": [],
+            "edges": [],
+            "summary": {
+                "observed_event_count": 0,
+                "sample_node_count": 0,
+                "sample_edge_count": 0,
+                "max_depth": 0,
+                "max_timestep": 0,
+            },
+        }
+
+    ordered = sorted(
+        events,
+        key=lambda event: (
+            0 if event.event_type == "source" else 1,
+            event.timestep,
+            event.delay_minutes,
+            event.tweet_id,
+        ),
+    )
+    public_ids: dict[str, str] = {}
+    selected: dict[str, ObservedCascadeEvent] = {}
+    depths: dict[str, int] = {}
+
+    def public_id(tweet_id: str) -> str:
+        if tweet_id not in public_ids:
+            public_ids[tweet_id] = f"cascade_{len(public_ids):04d}"
+        return public_ids[tweet_id]
+
+    for event in ordered:
+        if event.event_type == "source":
+            selected[event.tweet_id] = event
+            depths[event.tweet_id] = 0
+            public_id(event.tweet_id)
+            break
+
+    if not selected:
+        first = ordered[0]
+        selected[first.tweet_id] = first
+        depths[first.tweet_id] = 0
+        public_id(first.tweet_id)
+
+    for event in ordered:
+        if len(selected) >= max_nodes:
+            break
+        if event.tweet_id in selected:
+            continue
+        if event.parent_tweet_id not in selected:
+            continue
+        selected[event.tweet_id] = event
+        depths[event.tweet_id] = depths[event.parent_tweet_id] + 1
+        public_id(event.tweet_id)
+
+    child_counts: Counter[str] = Counter()
+    edges: list[dict[str, object]] = []
+    for event in selected.values():
+        if event.parent_tweet_id in selected:
+            edges.append(
+                {
+                    "source": public_id(event.parent_tweet_id),
+                    "target": public_id(event.tweet_id),
+                    "timestep": event.timestep,
+                }
+            )
+            child_counts[event.parent_tweet_id] += 1
+
+    nodes = [
+        {
+            "id": public_id(event.tweet_id),
+            "event_type": event.event_type,
+            "timestep": event.timestep,
+            "depth": depths.get(event.tweet_id, 0),
+            "child_count": child_counts[event.tweet_id],
+        }
+        for event in selected.values()
+    ]
+
+    return {
+        "type": "observed_acl2017_cascade",
+        "case_name": ordered[0].case_name,
+        "story_id": ordered[0].story_id,
+        "nodes": nodes,
+        "edges": edges[: max(0, max_nodes - 1)],
+        "summary": {
+            "observed_event_count": len(events),
+            "sample_node_count": len(nodes),
+            "sample_edge_count": min(len(edges), max(0, max_nodes - 1)),
+            "max_depth": max((node["depth"] for node in nodes), default=0),
+            "max_timestep": max((event.timestep for event in events), default=0),
+        },
+    }
+
+
 def _edge_to_event(
     edge: PropagationEdge,
     summary: CaseSummary,

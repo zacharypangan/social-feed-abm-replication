@@ -1,0 +1,377 @@
+{
+  "project": {
+    "name": "social-feed-abm-replication",
+    "phase": "phase6_replication_fidelity_repair"
+  },
+  "seed": 316,
+  "data": {
+    "observed_output_dir": "outputs/phase2_observed_cascades",
+    "output_dir": "outputs/phase6_replication_fidelity_repair",
+    "dashboard_data_path": "outputs/replication-dashboard/data/replication-data.json"
+  },
+  "selected_cases": [
+    {
+      "case_name": "false_tupac_hiding",
+      "story_id": "505369323922522113",
+      "expected_label": "false",
+      "role": "original_false_case",
+      "initial_infected": 0.7,
+      "timesteps": 80,
+      "paper_probabilities": {
+        "p_reshare": 0.03669678,
+        "p_reject": 0.01459229,
+        "p_online": 0.10714111
+      }
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "story_id": "692812029611089920",
+      "expected_label": "non-rumor",
+      "role": "original_non_false_case",
+      "initial_infected": 0.5,
+      "timesteps": 40,
+      "paper_probabilities": {
+        "p_reshare": 0.0770166,
+        "p_reject": 0.06335449,
+        "p_online": 0.06335449
+      }
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "story_id": "553960736964476928",
+      "expected_label": "false",
+      "role": "additional_false_case",
+      "initial_infected": 0.7,
+      "timesteps": 80,
+      "paper_probabilities": {
+        "p_reshare": 0.02094727,
+        "p_reject": 0.00696533,
+        "p_online": 0.1000195
+      }
+    }
+  ],
+  "simulation": {
+    "n_agents": 1000,
+    "avg_followees": 100,
+    "avg_viewed_posts": 40,
+    "avg_viewed_posts_std": 20,
+    "n_sims": 5,
+    "feed_algorithms": [
+      "chronological",
+      "popularity",
+      "belief",
+      "random"
+    ]
+  },
+  "model_fidelity": {
+    "network_model": "barabasi_albert",
+    "belief_acceptance_distance": 0.35,
+    "belief_update_rate": 0.15,
+    "belief_update_mode": "bayesian",
+    "recent_posts_per_followee": 3,
+    "verified_probability": 0.02,
+    "verified_influence_multiplier": 1.5,
+    "popularity_feedback": true,
+    "probability_sampling": true,
+    "probability_std_fraction": 0.1,
+    "background_posts_per_agent": 2,
+    "background_post_probability": 0.02,
+    "network_snapshot_max_nodes": 150,
+    "network_snapshot_max_edges": 350,
+    "cascade_snapshot_max_nodes": 250
+  },
+  "paper_targets": [
+    {
+      "case_name": "false_tupac_hiding",
+      "feed_algorithm": "chronological",
+      "metric": "p_online",
+      "paper_table": "B.1/B.2",
+      "target_value": 0.10714111,
+      "note": "Paper-reported calibrated probability transcribed into Phase 4 config."
+    },
+    {
+      "case_name": "false_tupac_hiding",
+      "feed_algorithm": "chronological",
+      "metric": "p_reshare",
+      "paper_table": "B.1/B.2",
+      "target_value": 0.03669678,
+      "note": "Paper-reported calibrated probability transcribed into Phase 4 config."
+    },
+    {
+      "case_name": "false_tupac_hiding",
+      "feed_algorithm": "chronological",
+      "metric": "p_reject",
+      "paper_table": "B.1/B.2",
+      "target_value": 0.01459229,
+      "note": "Paper-reported calibrated probability transcribed into Phase 4 config."
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "feed_algorithm": "chronological",
+      "metric": "p_online",
+      "paper_table": "B.1/B.2",
+      "target_value": 0.06335449,
+      "note": "Paper-reported calibrated probability transcribed into Phase 4 config."
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "feed_algorithm": "chronological",
+      "metric": "p_reshare",
+      "paper_table": "B.1/B.2",
+      "target_value": 0.0770166,
+      "note": "Paper-reported calibrated probability transcribed into Phase 4 config."
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "feed_algorithm": "chronological",
+      "metric": "p_reject",
+      "paper_table": "B.1/B.2",
+      "target_value": 0.06335449,
+      "note": "Paper-reported calibrated probability transcribed into Phase 4 config."
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "feed_algorithm": "chronological",
+      "metric": "p_online",
+      "paper_table": "B.1/B.2",
+      "target_value": 0.1000195,
+      "note": "Paper-reported calibrated probability from the replication planning notes."
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "feed_algorithm": "chronological",
+      "metric": "p_reshare",
+      "paper_table": "B.1/B.2",
+      "target_value": 0.02094727,
+      "note": "Paper-reported calibrated probability from the replication planning notes."
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "feed_algorithm": "chronological",
+      "metric": "p_reject",
+      "paper_table": "B.1/B.2",
+      "target_value": 0.00696533,
+      "note": "Paper-reported calibrated probability from the replication planning notes."
+    },
+    {
+      "case_name": "false_tupac_hiding",
+      "feed_algorithm": "popularity",
+      "metric": "change_phi_avg",
+      "paper_table": "4",
+      "target_value": 6.04,
+      "note": "Table 4 false case-study relative change."
+    },
+    {
+      "case_name": "false_tupac_hiding",
+      "feed_algorithm": "popularity",
+      "metric": "change_phi_max",
+      "paper_table": "4",
+      "target_value": 1.11,
+      "note": "Table 4 false case-study relative change."
+    },
+    {
+      "case_name": "false_tupac_hiding",
+      "feed_algorithm": "popularity",
+      "metric": "change_belief_purity",
+      "paper_table": "4",
+      "target_value": -0.1,
+      "note": "Table 4 false case-study relative change."
+    },
+    {
+      "case_name": "false_tupac_hiding",
+      "feed_algorithm": "belief",
+      "metric": "change_phi_avg",
+      "paper_table": "4",
+      "target_value": 1.42,
+      "note": "Table 4 false case-study relative change."
+    },
+    {
+      "case_name": "false_tupac_hiding",
+      "feed_algorithm": "belief",
+      "metric": "change_phi_max",
+      "paper_table": "4",
+      "target_value": 0.11,
+      "note": "Table 4 false case-study relative change."
+    },
+    {
+      "case_name": "false_tupac_hiding",
+      "feed_algorithm": "belief",
+      "metric": "change_belief_purity",
+      "paper_table": "4",
+      "target_value": 0.32,
+      "note": "Table 4 false case-study relative change."
+    },
+    {
+      "case_name": "false_tupac_hiding",
+      "feed_algorithm": "random",
+      "metric": "change_phi_avg",
+      "paper_table": "4",
+      "target_value": -0.04,
+      "note": "Table 4 false case-study relative change."
+    },
+    {
+      "case_name": "false_tupac_hiding",
+      "feed_algorithm": "random",
+      "metric": "change_phi_max",
+      "paper_table": "4",
+      "target_value": 0.0,
+      "note": "Table 4 false case-study relative change."
+    },
+    {
+      "case_name": "false_tupac_hiding",
+      "feed_algorithm": "random",
+      "metric": "change_belief_purity",
+      "paper_table": "4",
+      "target_value": -0.07,
+      "note": "Table 4 false case-study relative change."
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "feed_algorithm": "popularity",
+      "metric": "change_phi_avg",
+      "paper_table": "5",
+      "target_value": 6.15,
+      "note": "Table 5 non-false case-study relative change."
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "feed_algorithm": "popularity",
+      "metric": "change_phi_max",
+      "paper_table": "5",
+      "target_value": 2.44,
+      "note": "Table 5 non-false case-study relative change."
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "feed_algorithm": "popularity",
+      "metric": "change_belief_purity",
+      "paper_table": "5",
+      "target_value": -0.35,
+      "note": "Table 5 non-false case-study relative change."
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "feed_algorithm": "belief",
+      "metric": "change_phi_avg",
+      "paper_table": "5",
+      "target_value": 0.63,
+      "note": "Table 5 non-false case-study relative change."
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "feed_algorithm": "belief",
+      "metric": "change_phi_max",
+      "paper_table": "5",
+      "target_value": 0.1,
+      "note": "Table 5 non-false case-study relative change."
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "feed_algorithm": "belief",
+      "metric": "change_belief_purity",
+      "paper_table": "5",
+      "target_value": 0.58,
+      "note": "Table 5 non-false case-study relative change."
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "feed_algorithm": "random",
+      "metric": "change_phi_avg",
+      "paper_table": "5",
+      "target_value": -0.37,
+      "note": "Table 5 non-false case-study relative change."
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "feed_algorithm": "random",
+      "metric": "change_phi_max",
+      "paper_table": "5",
+      "target_value": -0.37,
+      "note": "Table 5 non-false case-study relative change."
+    },
+    {
+      "case_name": "nonrumor_justin_bieber_loving_himself",
+      "feed_algorithm": "random",
+      "metric": "change_belief_purity",
+      "paper_table": "5",
+      "target_value": 0.01,
+      "note": "Table 5 non-false case-study relative change."
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "feed_algorithm": "popularity",
+      "metric": "change_phi_avg",
+      "paper_table": "B.2",
+      "target_value": 1.23,
+      "note": "Table B.2 additional false case-study relative change."
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "feed_algorithm": "popularity",
+      "metric": "change_phi_max",
+      "paper_table": "B.2",
+      "target_value": 0.0,
+      "note": "Table B.2 additional false case-study relative change."
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "feed_algorithm": "popularity",
+      "metric": "change_belief_purity",
+      "paper_table": "B.2",
+      "target_value": 0.31,
+      "note": "Table B.2 additional false case-study relative change."
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "feed_algorithm": "belief",
+      "metric": "change_phi_avg",
+      "paper_table": "B.2",
+      "target_value": 0.52,
+      "note": "Table B.2 additional false case-study relative change."
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "feed_algorithm": "belief",
+      "metric": "change_phi_max",
+      "paper_table": "B.2",
+      "target_value": 0.0,
+      "note": "Table B.2 additional false case-study relative change."
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "feed_algorithm": "belief",
+      "metric": "change_belief_purity",
+      "paper_table": "B.2",
+      "target_value": 0.94,
+      "note": "Table B.2 additional false case-study relative change."
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "feed_algorithm": "random",
+      "metric": "change_phi_avg",
+      "paper_table": "B.2",
+      "target_value": -0.43,
+      "note": "Table B.2 additional false case-study relative change."
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "feed_algorithm": "random",
+      "metric": "change_phi_max",
+      "paper_table": "B.2",
+      "target_value": 0.0,
+      "note": "Table B.2 additional false case-study relative change."
+    },
+    {
+      "case_name": "false_helric_fredou",
+      "feed_algorithm": "random",
+      "metric": "change_belief_purity",
+      "paper_table": "B.2",
+      "target_value": 0.47,
+      "note": "Table B.2 additional false case-study relative change."
+    }
+  ],
+  "verdict": {
+    "match_tolerance": 0.05,
+    "directional_tolerance": 0.25
+  }
+}

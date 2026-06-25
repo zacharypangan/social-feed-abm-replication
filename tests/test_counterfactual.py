@@ -12,6 +12,7 @@ from social_feed_abm.counterfactual import (  # noqa: E402
     paper_table_rows,
     relative_change,
     relative_changes_for_case,
+    replication_verdict_rows,
 )
 
 
@@ -68,6 +69,37 @@ class CounterfactualTests(unittest.TestCase):
         self.assertEqual(rows[0]["change_phi_avg"], -0.1)
         self.assertEqual(rows[0]["change_phi_max"], -0.2)
         self.assertEqual(rows[0]["change_belief_purity"], 0.3)
+
+    def test_replication_verdict_rows_handles_matches_and_blocked_targets(self) -> None:
+        rows = replication_verdict_rows(
+            [
+                {
+                    "case_name": "case",
+                    "feed_algorithm": "chronological",
+                    "metric": "p_online",
+                    "actual_value": 0.101,
+                }
+            ],
+            [
+                {
+                    "case_name": "case",
+                    "feed_algorithm": "chronological",
+                    "metric": "p_online",
+                    "paper_table": "B.1",
+                    "target_value": 0.1,
+                },
+                {
+                    "case_name": "case",
+                    "feed_algorithm": "popularity",
+                    "metric": "change_phi_avg",
+                    "paper_table": "3",
+                    "target_value": None,
+                },
+            ],
+        )
+
+        self.assertEqual(rows[0]["verdict"], "matched")
+        self.assertEqual(rows[1]["verdict"], "blocked")
 
 
 if __name__ == "__main__":

@@ -138,6 +138,7 @@ def main() -> int:
                 "Each case reuses its Phase 4 best chronological calibrated probabilities across all feed objectives.",
                 "Relative changes are computed against the chronological feed baseline for the same case.",
                 "FakeNewsNet is audited for tweet-ID volume only and is not used as a cascade-validation target.",
+                "Phase 5 is a calibrated counterfactual baseline; Phase 6 repairs network and belief-fidelity gaps.",
             ],
             "fakenewsnet_summary_count": len(fakenewsnet_summary),
         },
